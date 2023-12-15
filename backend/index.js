@@ -5,7 +5,7 @@ const dotenv=require('dotenv')
 const cors=require('cors')
 const path=require("path")
 const bodyParser = require('body-parser');
-const cookieParser=require('cookie-parser')
+const cookieParser = require('cookie-parser')
 
 dotenv.config()
 
@@ -31,10 +31,11 @@ app.use(cookieParser())
 const user = require("./routes/userRoute");
 
 app.use("/api/v1",user);
+app.use("/api/invoice", require('./routes/invoice'));
 
 const PORT = process.env.PORT || 5000
 
 app.listen(PORT,()=>{
     connectDB()
     console.log("app is running on port "+PORT)
-})
+}) 

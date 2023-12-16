@@ -224,6 +224,9 @@ router.post(
   }
 );
 
+router.get('/makepdf/downloadpdf', (req, res)=>{
+  res.download('./a4.pdf');
+})
 
 
 module.exports = router;

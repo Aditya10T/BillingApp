@@ -1,52 +1,68 @@
 import React, { useState } from "react";
 import TableRows from "./TableRows.jsx";
+import Item from "./Item.jsx";
 
 const AddDeleteTableRows = ({ updateData }) => {
-  const [rowsData, setRowsData] = useState([]);
+  // const [rowsData, setRowsData] = useState([]);
 
-  const addTableRows = (e) => {
-    const rowsInput = {
-      itemNamep: "",
-      itemHsnp: 0,
-      itemQuantityp: 0,
-      itemPricep: 0,
-      itemCgstp: 0,
-      itemSgstp: 0,
-    };
-    setRowsData([...rowsData, rowsInput]);
-    e.preventDefault();
+  // const addTableRows = (e) => {
+    // const rowsInput = {
+    //   itemNamep: "",
+    //   itemHsnp: 0,
+    //   itemQuantityp: 0,
+    //   itemPricep: 0,
+    //   itemCgstp: 0,
+    //   itemSgstp: 0,
+    // };
+    // setRowsData([...rowsData, rowsInput]);
+    // e.preventDefault();
 
     // console.log(rowsData)
-  };
-  const deleteTableRows = (index) => {
-    const rows = [...rowsData];
-    rows.splice(index, 1);
-    setRowsData(rows);
-  };
+  // };
+  // const deleteTableRows = (index) => {
+  //   const rows = [...rowsData];
+  //   rows.splice(index, 1);
+  //   setRowsData(rows);
+  // };
 
   const handleChange = (index, evnt) => {
     const { name, value } = evnt.target;
-    const rowsInput = [...rowsData];
-    rowsInput[index][name] = name == "itemNamep" ? value : (value>=0)? parseFloat(value):0;
-    setRowsData(rowsInput);
-    updateData(rowsData);
+    console.log("skdj");
+    const itemInput = [...items];
+    itemInput[index][name] =
+      name == "itemNamep" ? value : value >= 0 ? parseFloat(value) : 0;
+    setItems(itemInput);
+    updateData(items);
 
     evnt.preventDefault();
   };
+
+  const [items, setItems] = useState([]);
+
+  const addItem = () => {
+    setItems([...items, { itemNamep: "", itemHsnp: 0, itemQuantityp: 0, itemPricep:0, itemCgstp:0, itemSgst:0 }]);
+  };
+
+  const deleteItem = (index) => {
+    const newItems = [...items];
+    newItems.splice(index, 1);
+    setItems(newItems);
+  };
+
   return (
-    <div >
-      <div >
-        <div className="mt-4 flex flex-col w-full border border-gray-300 rounded overflow-hidden">
-          <table className="w-full table-fixed text-sm text-left text-gray-600 dark:text-gray-400">
+    <div>
+      <div>
+        <div className="mt-4 flex flex-col w-full  rounded overflow-hidden">
+          {/* <table className="w-full  text-sm text-left text-gray-600 dark:text-gray-400">
             <thead>
               <tr className="bg-gray-200 dark:bg-gray-700 border-b border-gray-300 dark:border-gray-800 justify-center">
-                <th className="text-center px-4 py-2 mx-2">Item Name</th>
-                <th className="text-center px-4 py-2 mx-2">HSN/SAC</th>
-                <th className="text-center px-4 py-2 mx-2">Quantity</th>
-                <th className="text-center px-4 py-2 mx-2">Price</th>
-                <th className="text-center px-4 py-2 mx-2">CGST</th>
-                <th className="text-center px-4 py-2 mx-2">SGST</th>
-                <th className="text-center px-4 py-2 mx-2">
+                <th className="text-center px-4 py-2 mx-1">Item Name</th>
+                <th className="text-center px-4 py-2 mx-1">HSN/SAC</th>
+                <th className="text-center px-4 py-2 mx-1">Quantity</th>
+                <th className="text-center px-4 py-2 mx-1">Price</th>
+                <th className="text-center px-4 py-2 mx-1">CGST</th>
+                <th className="text-center px-4 py-2 mx-1">SGST</th>
+                <th className="text-center px-4 py-2 mx-1">
                   <button
                     className="bg-white w-20 rounded border border-green-900 align-top justify-center text-black "
                     onClick={addTableRows}
@@ -63,7 +79,24 @@ const AddDeleteTableRows = ({ updateData }) => {
                 handleChange={handleChange}
               />
             </tbody>
-          </table>
+          </table> */}
+
+          <div className="container mx-auto my-8">
+            <button
+              type="button"
+              className="rounded-lg bg-green-500 text-white font-bold py-2 px-4 hover:bg-green-700"
+              onClick={addItem}
+            >
+              Add Item
+            </button>
+            <div className="card-list grid gap-4 mt-8">
+                <Item
+                  items={items}
+                  onDelete={() => deleteItem}
+                  handleChange={handleChange}
+                />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -71,17 +104,6 @@ const AddDeleteTableRows = ({ updateData }) => {
 };
 
 export default AddDeleteTableRows;
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useState } from "react";
 

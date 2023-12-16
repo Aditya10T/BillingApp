@@ -8,6 +8,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { UserContextProvider } from "./context/UserContext";
+import Pdf from "./pages/Pdf";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
             path="/reset-password/:token"
             element={<ResetPassword />}
           />
+          <Route exact path = "/pdfgenerate" element={<ProtectedRoute Component={Pdf}/>}/>
         </Routes>
       </UserContextProvider>
     </>

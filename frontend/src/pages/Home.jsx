@@ -1,6 +1,8 @@
 import React from 'react'
 
 const Home = () => {
+
+ 
   return (
     <>
       <div className='flex justify-center items-center'>
@@ -8,6 +10,7 @@ const Home = () => {
           invoices with a click.
         </p>
       </div>
+        <a className='tracking-wide w-full mt-6 rounded-lg px-4 py-2 text-lg bg-blue-400' href='/pdfgenerate'>Generate Invoice</a>
     </>
   )
 }

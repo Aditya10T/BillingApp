@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AddDeleteTableRows from "./AddDeleteTableRows";
 import { saveAs } from "file-saver";
 import axios from "axios";
+import Sidebar from "../components/Sidebar";
 
 const Pdf = () => {
   const [pdfUrl, setPdfUrl] = useState(null);

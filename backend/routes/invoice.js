@@ -7,6 +7,17 @@ const { body, validationResult } = require("express-validator");
 //not adding middleware
 //check InvoiceModel variable name if get error
 
+//importing and setting up cloudinary
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({ 
+  cloud_name: 'dtj5bepgz', 
+  api_key: '419586199367131', 
+  api_secret: 'pybOMErW3jCMzIflFadMJ4Y1X_w' 
+});
+
+
+//funtion to convert number(integer) into words
 function valueInWords(value) { 
   let ones = [
     "",
@@ -216,7 +227,19 @@ router.post(
       doc.setFont("times", "italic");
       doc.text(105, 290, "This invoice is computer generated.", "center");
       doc.save("a4.pdf");
-      return res.json({answer:"Inki pinki ponky!"})
+
+      let pdf_link = "a"
+      await cloudinary.uploader
+        .upload("a4.pdf")
+        .then(result=>{
+          // console.log(result.secure_url);
+          pdf_link = result.secure_url;
+          // console.log(pdf_link)
+        })
+
+      console.log(pdf_link)
+
+      return res.json({pdf_link:pdf_link});
     } catch (error) {
         console.log("moye moye!");
         console.log(error)
@@ -224,9 +247,6 @@ router.post(
   }
 );
 
-router.get('/makepdf/downloadpdf', (req, res)=>{
-  res.download('./a4.pdf');
-})
 
 
 module.exports = router;

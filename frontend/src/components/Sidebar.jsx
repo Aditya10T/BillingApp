@@ -32,7 +32,7 @@ const Sidebar = () => {
                        </a>
                     </li>
                     <li className="flex flex-row">
-                       <a href="/profile" className="flex gap-4 text-black hover:text-blue-700 transition">
+                       <a href="/me" className="flex gap-4 text-black hover:text-blue-700 transition">
                         <FaRegUser size={25}/>
                         <a className="-ml-1">Profile</a>
                        </a>

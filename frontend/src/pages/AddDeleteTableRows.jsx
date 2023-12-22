@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TableRows from "./TableRows.jsx";
 import Item from "./Item.jsx";
 
 const AddDeleteTableRows = ({ updateData }) => {
 
+  const [items, setItems] = useState([]);
+
+  useEffect(()=>{
+    console.log(items);
+  }, [items]);
+
   const handleChange = (index, evnt) => {
     const { name, value } = evnt.target;
-console.log("skdj");
+    console.log("skdj");
     const itemInput = [...items];
     itemInput[index][name] =
       name == "itemNamep" ? value : value >= 0 ? parseFloat(value) : 0;
@@ -15,8 +21,6 @@ console.log("skdj");
 
     evnt.preventDefault();
   };
-
-  const [items, setItems] = useState([]);
 
   const addItem = () => {
     setItems([

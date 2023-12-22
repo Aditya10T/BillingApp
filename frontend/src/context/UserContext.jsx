@@ -14,6 +14,7 @@ export function UserContextProvider({children}){
     useEffect(()=>{
       const logged = JSON.parse(localStorage.getItem('user'));
       setUser(logged);
+      // console.log(user);
     },[navigate])
     
     return (<UserContext.Provider value={{user,setUser}}>

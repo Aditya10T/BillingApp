@@ -29,9 +29,10 @@ app.use(cookieParser())
 
 // Route imports
 const user = require("./routes/userRoute");
+const invoice = require('./routes/invoice');
 
 app.use("/api/v1",user);
-app.use("/api/invoice", require('./routes/invoice'));
+app.use("/api/invoice", invoice);
 
 const PORT = process.env.PORT || 5000
 

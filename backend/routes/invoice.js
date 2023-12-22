@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const {jsPDF} = require('jspdf');
 require('jspdf-autotable')
-const InvoiceModel = require("../models/Invoice");
+const Invoice = require("../models/Invoice");
+const User = require('../models/userModel')
 const { body, validationResult } = require("express-validator");
 //not adding middleware
 //check InvoiceModel variable name if get error
@@ -10,11 +11,20 @@ const { body, validationResult } = require("express-validator");
 //importing and setting up cloudinary
 const cloudinary = require('cloudinary').v2;
 
+// cloudinary.config({ 
+//   cloud_name: 'dtj5bepgz', 
+//   api_key: '419586199367131', 
+//   api_secret: 'pybOMErW3jCMzIflFadMJ4Y1X_w' 
+// });
+
+// import {v2 as cloudinary} from 'cloudinary';
+          
 cloudinary.config({ 
-  cloud_name: 'dtj5bepgz', 
-  api_key: '419586199367131', 
-  api_secret: 'pybOMErW3jCMzIflFadMJ4Y1X_w' 
+  cloud_name: 'df8yirbq9', 
+  api_key: '382357723465976', 
+  api_secret: 'LG9qTeHHWcFuH4F9QukgRWqdrJY' 
 });
+
 
 
 //funtion to convert number(integer) into words
@@ -153,6 +163,9 @@ router.post(
       //we will get seller's information from mongo
       //but since right now we are not having mongo connection
       // I am hardcoding the seller's values
+
+
+      //hardcoded -> mongo details
       var sellerFirm = "DK Enterprises";
       var sellerAddress = "Kalam Hostel, IIT Patna";
       var sellerPincode = 130293;
@@ -228,18 +241,52 @@ router.post(
       doc.text(105, 290, "This invoice is computer generated.", "center");
       doc.save("a4.pdf");
 
-      let pdf_link = "a"
+      let pdf_link = "", jpg_link = "";
       await cloudinary.uploader
-        .upload("a4.pdf")
+        .upload("a4.pdf", {resource_type:"raw"})
         .then(result=>{
           // console.log(result.secure_url);
           pdf_link = result.secure_url;
           // console.log(pdf_link)
         })
 
-      console.log(pdf_link)
+        await cloudinary.uploader
+        .upload("a4.pdf")
+        .then(result=>{
+          // console.log(result.secure_url);
+          jpg_link = result.secure_url;
+          // console.log(pdf_link)
+        })
 
-      return res.json({pdf_link:pdf_link});
+        jpg_link = jpg_link.substring(0, jpg_link.length-3)+"jpg";
+      console.log("PDF = " + pdf_link);
+      console.log("JPG = " + jpg_link);
+      //converted .pdf link to .jpg 
+      // pdf_link = pdf_link.substring(0, pdf_link.length-3) + "jpg";
+
+      
+      const invoice = await Invoice.create(
+        {
+          firm : firm,
+          date : date,
+          invoiceNumber : invoiceNumber,
+          buyerName : buyerName,
+          buyerAddress : buyerAddress,
+          buyerContact : buyerContact,
+          buyerGstIn : buyerGstIn,
+          itemName : itemName,
+          itemHsn : itemHsn,
+          itemSgst : itemSgst,
+          itemCgst : itemCgst,
+          itemPrice : itemPrice,
+          itemQuantity : itemQuantity,
+          pdfLink : pdf_link,
+          jpgLink : jpg_link
+        }
+      ) 
+
+
+      return res.json({pdf_link:pdf_link, jpg_link: jpg_link});
     } catch (error) {
         console.log("moye moye!");
         console.log(error)

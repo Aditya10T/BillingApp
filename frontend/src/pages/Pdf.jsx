@@ -1,16 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AddDeleteTableRows from "./AddDeleteTableRows";
 import { saveAs } from "file-saver";
 import axios from "axios";
+import { UserContext } from "../context/UserContext";
 import Sidebar from "../components/Sidebar";
 
 const Pdf = () => {
+  const today = new Date();
   const [pdfUrl, setPdfUrl] = useState("");
+  const [jpgUrl, setJpgUrl] = useState("");
   const [data, setData] = useState([]);
+  const {user, setUser}  = useContext(UserContext);
+  console.log(user);
   const [info, setInfo] = useState({
-    firm: "DK Enterprises",
+    //name->firm name
+    firm: user==null ? {} : user.user._id,
     invoiceNumber: 1,
-    date: "27/11/2023",
+    date: today,
     buyerName: "",
     buyerAddress: "",
     buyerPincode: 0,
@@ -21,18 +27,34 @@ const Pdf = () => {
   
   useEffect(()=>{
     console.log(info);
-    // console.log(pdfUrl);
   }, [info])
 
   useEffect(()=>{
-    console.log("update url : "+pdfUrl);
+    console.log("updated pdf url : "+pdfUrl);
   }, [pdfUrl])  
+
+  useEffect(()=>{
+    console.log("updated jpg url : "+jpgUrl);
+  }, [jpgUrl])
+
+  useEffect(()=>{
+    console.log("data ", data);
+    console.log("item Details", info);
+  }, [data])
+
+  useEffect(()=>{
+    const logged = JSON.parse(localStorage.getItem('user'));
+    setUser(logged);
+    setInfo({...info, firm : logged.user._id});
+    // console.log(user);
+  }, [pdfUrl])
 
   
 
   const updateData = (newData) => {
     console.log("ok");
     setData([...newData]);
+    setInfo({ ...info, itemDetails: [...data] });
     console.log(data);
   };
 
@@ -52,15 +74,15 @@ const Pdf = () => {
 
   
   const successCallback = (response) => {
-    console.log("received url : "+response.data.pdf_link)
-    const linkk = response.data.pdf_link;
-    setPdfUrl(linkk.substring(0, linkk.length - 3) + "jpg");
-    console.log(pdfUrl);
+    console.log("received pdf url : "+response.data.pdf_link);
+    console.log("recieved jpg url : "+response.data.jpg_link);
+    setPdfUrl(response.data.pdf_link);
+    setJpgUrl(response.data.jpg_link);
   };
 
   const formSubmission = async (e) => {
     e.preventDefault();
-    setInfo({ ...info, itemDetails: [...data] });
+    // setInfo({ ...info, itemDetails: [...data] });
     console.log(info);
     console.log(JSON.stringify(info));
 
@@ -88,7 +110,8 @@ const Pdf = () => {
         </h1>
         <div className="flex items-center space-x-4">
           <span className="text-gray-500">Firm:</span>
-          <span className="font-bold text-gray-700">{info.firm}</span>
+          {/* name ->firm name */}
+          <span className="font-bold text-gray-700">{"Darish"}</span>
         </div>
         <div className="flex items-center space-x-4">
           <span className="text-gray-500">Invoice No.:</span>
@@ -96,7 +119,7 @@ const Pdf = () => {
         </div>
         <div className="flex items-center space-x-4">
           <span className="text-gray-500">Date:</span>
-          <span className="font-bold text-gray-700">{info.date}</span>
+          <span className="font-bold text-gray-700">{info.date.getDate() + "/" + info.date.getMonth() + "/" + (1900+info.date.getYear()).toString()}</span>
         </div>
         <h2 className="text-lg font-semibold text-gray-700">
           Buyer Information
@@ -164,8 +187,12 @@ const Pdf = () => {
           Generate PDF
         </button>
       </form>
+      <div className="grid grid-cols-5 cols">
+      {pdfUrl != "" && <img src={jpgUrl} className="w-10/12 col-span-4 border border-black my-10 mx-auto" />}
+      {/* {pdfUrl != "" && <iframe src={pdfUrl} className="w-10/12 col-span-4 border border-black my-10 mx-auto" />} */}
 
-      {pdfUrl != "" && <img src={pdfUrl} className="w-7/12 border border-black my-10 mx-auto" />}
+      {pdfUrl != "" && <a href={jpgUrl} download="invoice.jpg"><button className="rounded-md bg-yellow-400 px-4 py-2 mx-auto my-auto h-min font-semibold text-black shadow-md hover:bg-yellow-500">Download</button></a>}
+    </div>
     </div>
   );
 };

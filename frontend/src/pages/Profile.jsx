@@ -15,6 +15,8 @@ const Profile = () => {
   const { user, setUser } = useContext(UserContext);
   const [vis, setVis] = useState(false);
   const navigate = useNavigate();
+  console.log("context = ");
+  console.log(user);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -37,6 +39,7 @@ const Profile = () => {
       const res = await axios.get(URL + "/api/v1/me", {
         withCredentials: true,
       });
+      //address, contact, pincode, gstin
       setName(res.data.user.name);
       setEmail(res.data.user.email);
     } catch (error) {
@@ -86,8 +89,8 @@ const Profile = () => {
           </a>
         </div>
         <div className="flex-grow mt-10 flex flex-col justify-center items-center">
-          <div className="flex flex-col w-[500px]  p-6 border-solid  rounded-lg shadow-lg shadow-black border-indigo-300">
-            <h1 className="self-center font-bold text-2xl text-indigo-600">
+          <div className="flex flex-col w-[500px] h-max p-6 border-solid  rounded-lg shadow-lg shadow-black border-indigo-300">
+            <h1 className="self-center font-bold text-2xl text-black">
               Profile
             </h1>
             <div className="flex flex-col mt-8 p-2">
@@ -114,7 +117,7 @@ const Profile = () => {
             </div>
             <button
               onClick={handleUpdate}
-              className="mt-4 border-solid border-2 py-2 bg-indigo-500 hover:bg-indigo-800 rounded-md text-white"
+              className="mt-4 border-solid border-2 py-2 bg-orange-500 hover:bg-indigo-800 rounded-md text-black font-semibold"
             >
               Update
             </button>
@@ -123,7 +126,7 @@ const Profile = () => {
                 setVis(true);
               }}
               hidden={vis ? "hidden" : ""}
-              className="mt-4 border-solid border-2 py-2 bg-indigo-500 hover:bg-indigo-800 text-white"
+              className="mt-4 border-solid border-2 py-2 bg-green-500 hover:bg-indigo-800 text-white"
             >
               Change Password
             </button>

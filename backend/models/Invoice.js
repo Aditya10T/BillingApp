@@ -56,6 +56,10 @@ const InvoiceSchema = new Schema({
     itemPrice:{
         type : Array,
         required : true
+    },
+    pdfLink:{
+        type : String,
+        required : true
     }
 })
 

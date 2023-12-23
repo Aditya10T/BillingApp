@@ -40,6 +40,7 @@ const Profile = () => {
         withCredentials: true,
       });
       //address, contact, pincode, gstin
+      console.log(res?.data);
       setName(res.data.user.name);
       setEmail(res.data.user.email);
     } catch (error) {

@@ -7,6 +7,10 @@ const path=require("path")
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 
+// Route imports
+const user = require("./routes/userRoute");
+const invoice = require('./routes/invoice');
+
 dotenv.config()
 
 // Database connection
@@ -21,18 +25,29 @@ const connectDB=async()=>{
     }
 }
 
+
 // Middlewares
 app.use(express.json())
+const _dirname = path.dirname("")
+const buildpath = path.join(_dirname,"../frontend/dist")
+app.use(express.static(buildpath));
+app.use(cors({origin:"http://localhost:8800",credentials:true}))
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(cors({origin:"http://localhost:5173",credentials:true}))
 app.use(cookieParser())
 
-// Route imports
-const user = require("./routes/userRoute");
-const invoice = require('./routes/invoice');
 
 app.use("/api/v1",user);
 app.use("/api/invoice", invoice);
+app.get("/*",function(req,res){
+    res.sendFile(
+        path.join(__dirname,"../frontend/dist/index.html"),
+        function(err){
+            if(err){
+                res.status(500).send(err);
+            }
+        }
+    );
+})
 
 const PORT = process.env.PORT || 5000
 

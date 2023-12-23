@@ -9,7 +9,7 @@ const ForgotPassword = () => {
 
   const handleEmail = async () => {
     try {
-      const res = await axios.post(URL + "/api/v1/password/forgot", { email });
+      const res = await axios.post("/api/v1/password/forgot", { email });
       setDone(true);
     } catch (error) {
       if(error.response.status===404){

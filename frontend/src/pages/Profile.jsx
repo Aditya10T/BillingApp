@@ -22,7 +22,7 @@ const Profile = () => {
     e.preventDefault();
     try {
       const res = axios.put(
-        URL + "/api/v1/me/update",
+       "/api/v1/me/update",
         { name, email },
         { withCredentials: true }
       );

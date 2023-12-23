@@ -7,15 +7,11 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
-<<<<<<< HEAD
 // Route imports
 const user = require("./routes/userRoute");
-const invoice = require('./routes/invoice');
+const invoice = require("./routes/invoice");
 
-dotenv.config()
-=======
 dotenv.config();
->>>>>>> origin/master
 
 // Database connection
 const connectDB = async () => {
@@ -29,40 +25,13 @@ const connectDB = async () => {
 
 
 // Middlewares
-<<<<<<< HEAD
 app.use(express.json())
-const _dirname = path.dirname("")
-const buildpath = path.join(_dirname,"../frontend/dist")
+const _dirname = path.dirname("");
+const buildpath = path.join(_dirname, "../frontend/dist");
 app.use(express.static(buildpath));
 app.use(cors({origin:"http://localhost:8800",credentials:true}))
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieParser())
-
-=======
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-//deployment
-const _dirname = path.dirname("");
-const buildpath = path.join(_dirname, "../frontend/dist");
-app.use(express.static(buildpath));
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
-app.get("/*", function (req, res) {
-  res.sendFile(
-    path.join(__dirname, "../frontend/dist/index.html"),
-    function (err) {
-      if (err) {
-        res.status(500).send(err);
-      }
-    }
-  );
-});
-
-// Route imports
-const user = require("./routes/userRoute");
-const invoice = require("./routes/invoice");
->>>>>>> origin/master
 
 app.use("/api/v1", user);
 app.use("/api/invoice", invoice);

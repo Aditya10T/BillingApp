@@ -12,7 +12,7 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      const res = await axios.post(URL + "/api/v1/register", {
+      const res = await axios.post("/api/v1/register", {
         name,
         email,
         password,

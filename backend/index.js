@@ -33,6 +33,24 @@ app.use(cors({origin:"http://localhost:8800",credentials:true}))
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieParser())
 
+<<<<<<< HEAD
+=======
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+//deployment
+const _dirname = path.dirname("");
+const buildpath = path.join(_dirname, "../frontend/dist");
+app.use(express.static(buildpath));
+app.use(cors({ origin: "http://localhost:8800", credentials: true }));
+
+
+// Route imports
+const user = require("./routes/userRoute");
+const invoice = require("./routes/invoice");
+
+>>>>>>> 7534da3385b5feca871fb32606b1765733b61308
 app.use("/api/v1", user);
 app.use("/api/invoice", invoice);
 app.get("/*",function(req,res){

@@ -7,13 +7,17 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [company,setCompany] = useState("");
+  const [phone,setPhone] = useState();
+  const [gstin,setGstin] = useState("");
+  const [address,setAddress] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async () => {
     try {
-      const res = await axios.post("/api/v1/register", {
-        name,
+      const res = await axios.post(URL+"/api/v1/register", {
+        name,company,phone,gstin,address,
         email,
         password,
       });
@@ -44,20 +48,20 @@ const Register = () => {
           </h3>
         </div>
         <div className="flex grow justify-center items-center bg-indigo-100">
-          <div className="lg:w-2/5 md:w-1/2 w-2/3">
-            <div className="bg-white p-10 rounded-lg shadow-lg min-w-full">
-              <h1 className="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">
+          <div className="lg:w-2/5 md:w-2/3 w-[74%]">
+            <div className="bg-white p-10 rounded-lg shadow-lg w-full">
+              <h1 className="text-center text-2xl mb-2 text-gray-600 font-bold font-sans">
                 Register
               </h1>
               <div>
                 <label
-                  className="text-gray-800 font-semibold block my-3 text-md"
+                  className="text-gray-800 font-semibold block my-2 text-md"
                   htmlFor="confirm"
                 >
                   Name
                 </label>
                 <input
-                  className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
+                  className="w-full bg-gray-100 px-4 py-1 rounded-lg focus:outline-none  focus:outline-indigo-500"
                   type="text"
                   name="name"
                   id="name"
@@ -66,15 +70,84 @@ const Register = () => {
                   required
                 />
               </div>
+              <div className="">
+                <label
+                  className="text-gray-800 font-semibold block my-2 text-md"
+                  htmlFor="company"
+                >
+                  Company
+                </label>
+                <input
+                  className="w-full bg-gray-100 px-4 py-1 rounded-lg focus:outline-indigo-500"
+                  type="text"
+                  name="company"
+                  id="company"
+                  placeholder="company"
+                  onChange={(e) => setCompany(e.target.value)}
+                  required
+                />
+              
+              </div>
+              <div>
+              <label
+                  className="text-gray-800 font-semibold block my-2 text-md"
+                  htmlFor="phone"
+                >
+                  Phone
+                </label>
+                <input
+                  className="w-full bg-gray-100 px-4 py-1 rounded-lg  focus:outline-indigo-500"
+                  type="number"
+                  name="phone"
+                  id="phone"
+                  placeholder="Phone no."
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+              <label
+                  className="text-gray-800 font-semibold block my-2 text-md"
+                  htmlFor="gstin"
+                >
+                  GSTIN
+                </label>
+                <input
+                  className="w-full bg-gray-100 px-4 py-1 rounded-lg  focus:outline-indigo-500"
+                  type="text"
+                  name="gstin"
+                  id="gstin"
+                  placeholder="GSTIN"
+                  onChange={(e) => setGstin(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+              <label
+                  className="text-gray-800 font-semibold block my-2 text-md"
+                  htmlFor="address"
+                >
+                  Address
+                </label>
+                <input
+                  className="w-full bg-gray-100 px-4 py-2 rounded-lg  focus:outline-indigo-500"
+                  type="text"
+                  name="address"
+                  id="address"
+                  placeholder="address"
+                  onChange={(e) => setAddress(e.target.value)}
+                  required
+                />
+              </div>
               <div>
                 <label
-                  className="text-gray-800 font-semibold block my-3 text-md"
+                  className="text-gray-800 font-semibold block my-2 text-md"
                   htmlFor="email"
                 >
                   Email
                 </label>
                 <input
-                  className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
+                  className="w-full bg-gray-100 px-4 py-2 rounded-lg  focus:outline-indigo-500"
                   type="email"
                   name="email"
                   id="email"
@@ -85,13 +158,13 @@ const Register = () => {
               </div>
               <div>
                 <label
-                  className="text-gray-800 font-semibold block my-3 text-md"
+                  className="text-gray-800 font-semibold block my-2 text-md"
                   htmlFfor="password"
                 >
                   Password
                 </label>
                 <input
-                  className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
+                  className="w-full bg-gray-100 px-4 py-2 rounded-lg  focus:outline-indigo-500"
                   type="Password"
                   name="password"
                   id="password"
@@ -106,13 +179,6 @@ const Register = () => {
                   onClick={handleRegister}
                 >
                   Register
-                </button>
-                <p className="font-bold flex justify-center mt-2 ">OR</p>
-                <button
-                  onClick={() => navigate("/login")}
-                  className="w-full mt-2 mb-3 bg-indigo-100 rounded-lg px-4 py-2 text-lg text-gray-800 tracking-wide font-semibold font-sans hover:bg-indigo-600 hover:text-white"
-                >
-                  Login
                 </button>
                 {error && <h3 className="text-red-500 text-sm ">{error}</h3>}
               </div>

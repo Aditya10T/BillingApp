@@ -14,7 +14,7 @@ const ResetPassword = () => {
  const handleClick = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/api/v1/password/reset/"+token,{password,confirmPassword});
+      const res = await axios.post(URL+"/api/v1/password/reset/"+token,{password,confirmPassword});
       alert("Password changed successfully");
       navigate("/login");
     } catch (error) {

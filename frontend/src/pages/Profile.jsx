@@ -8,6 +8,10 @@ import { useNavigate } from "react-router-dom";
 const Profile = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [company,setCompany] = useState("");
+  const [phone,setPhone] = useState();
+  const [gstin,setGstin] = useState("");
+  const [address,setAddress] = useState("");
   const [error, setError] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -22,8 +26,8 @@ const Profile = () => {
     e.preventDefault();
     try {
       const res = axios.put(
-       "/api/v1/me/update",
-        { name, email },
+      URL+ "/api/v1/me/update",
+        { name, email,company,address,gstin,phone },
         { withCredentials: true }
       );
       alert("User details updated");
@@ -36,13 +40,17 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("/api/v1/me", {
+      const res = await axios.get(URL+"/api/v1/me", {
         withCredentials: true,
       });
       //address, contact, pincode, gstin
       console.log(res?.data);
-      setName(res.data.user.name);
-      setEmail(res.data.user.email);
+      setName(res?.data.user.name);
+      setEmail(res?.data.user.email);
+      setAddress(res?.data.user.address);
+      setCompany(res?.data.user.company);
+      setPhone(res?.data.user.phone);
+      setGstin(res.data.user.gstin);
     } catch (error) {
       console.log(error);
       alert("Something went wrong");
@@ -60,7 +68,7 @@ const Profile = () => {
     console.log(myForm)
 
     try {
-      const res = await axios.put('/api/v1/password/update',myForm,{headers:{"Content-Type":"application/json"},withCredentials:true})
+      const res = await axios.put(URL+'/api/v1/password/update',myForm,{headers:{"Content-Type":"application/json"},withCredentials:true})
       alert("Password changed Successfully")
       setVis(false);
       window.location.reload();
@@ -113,6 +121,46 @@ const Profile = () => {
                 className="border-solid border-2 p-2 rounded-md bg-gray-200"
                 onChange={(e) => {
                   setEmail(e.target.value);
+                }}
+              ></input>
+              <label htmlFor="phone" className="mt-2 font-bold">
+                Phone:
+              </label>
+              <input
+                value={phone}
+                className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                }}
+              ></input>
+              <label htmlFor="company" className="mt-2 font-bold">
+                Company:
+              </label>
+              <input
+                value={company}
+                className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                onChange={(e) => {
+                  setCompany(e.target.value);
+                }}
+              ></input>
+              <label htmlFor="address" className="mt-2 font-bold">
+                Address:
+              </label>
+              <input
+                value={address}
+                className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                onChange={(e) => {
+                  setAddress(e.target.value);
+                }}
+              ></input>
+              <label htmlFor="gstin" className="mt-2 font-bold">
+                GSTIN:
+              </label>
+              <input
+                value={gstin}
+                className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                onChange={(e) => {
+                  setGstin(e.target.value);
                 }}
               ></input>
             </div>

@@ -8,10 +8,56 @@ const cloudinary = require("cloudinary");
 
 // Register a User
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, company, address, gstin, phone, email, password } = req.body;
+
+  if (
+    !name ||
+    !company ||
+    !address ||
+    !gstin ||
+    !phone ||
+    !email ||
+    !password
+  ) {
+    return res.status(400).json({
+      message: "Please provide all the requried fields",
+    });
+  }
+
+  const existingCompany = await User.findOne({ company });
+  if (existingCompany) {
+    return res.status(403).json({
+      message: "User with this company name already exists",
+    });
+  }
+
+  const existingGstin = await User.findOne({ gstin });
+  if (existingGstin) {
+    return res.status(403).json({
+      message: "User with this GSTIN number already exists",
+    });
+  }
+
+  const existingPhone = await User.findOne({ phone });
+  if (existingPhone) {
+    return res.status(403).json({
+      message: "User with this phone number already exists",
+    });
+  }
+
+  const existingEmail = await User.findOne({ email });
+  if (existingEmail) {
+    return res.status(403).json({
+      message: "User with this email already exists",
+    });
+  }
 
   const user = await User.create({
     name,
+    company,
+    address,
+    gstin,
+    phone,
     email,
     password,
   });
@@ -112,8 +158,8 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 
   if (!user) {
     return res.status(400).json({
-      message:"Reset password token is invalid or has expired"
-    })
+      message: "Reset password token is invalid or has expired",
+    });
   }
   if (req.body.password !== req.body.confirmPassword) {
     return next(new ErrorHander("Password does not match", 400));
@@ -163,8 +209,18 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   const newUserData = {
     name: req.body.name,
     email: req.body.email,
+    company: req.body.company,
+    phone: req.body.phone,
+    address: req.body.address,
+    gstin: req.body.gstin,
   };
-
+  const checkEmail = newUserData.email;
+  const existingUser = await User.findOne({ email: checkEmail });
+  if (!existingUser) {
+    return res.status(404).json({
+      message: "User not found",
+    });
+  }
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
     runValidators: true,
@@ -230,7 +286,6 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
       new ErrorHander(`User does not exist with Id: ${req.params.id}`, 400)
     );
   }
-
 
   await cloudinary.v2.uploader.destroy(imageId);
 

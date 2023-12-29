@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
   company:{
     type:String,
     required: true,
-    unique:true
+    // unique:true
   },
   address:{
     type:String,
@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     default: "user",
+  },
+  invoiceCount: {
+    type: Number,
+    default: 0,
   },
   createdAt: {
     type: Date,

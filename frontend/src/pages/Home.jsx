@@ -19,7 +19,7 @@ const Home = () => {
         </a>
         <a
           className="rounded-md shadow font-semibold bg-green-500 text-white hover:bg-green-700 mx-auto px-4 py-2 my-4"
-          href="/pdfgenerate"
+          href="/allinvoice"
         >
           View previous Invoice
         </a>

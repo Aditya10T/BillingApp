@@ -7,17 +7,21 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [company,setCompany] = useState("");
-  const [phone,setPhone] = useState();
-  const [gstin,setGstin] = useState("");
-  const [address,setAddress] = useState("");
+  const [company, setCompany] = useState("");
+  const [phone, setPhone] = useState();
+  const [gstin, setGstin] = useState("");
+  const [address, setAddress] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async () => {
     try {
-      const res = await axios.post(URL+"/api/v1/register", {
-        name,company,phone,gstin,address,
+      const res = await axios.post(URL + "/api/v1/register", {
+        name,
+        company,
+        phone,
+        gstin,
+        address,
         email,
         password,
       });
@@ -86,10 +90,9 @@ const Register = () => {
                   onChange={(e) => setCompany(e.target.value)}
                   required
                 />
-              
               </div>
               <div>
-              <label
+                <label
                   className="text-gray-800 font-semibold block my-2 text-md"
                   htmlFor="phone"
                 >
@@ -106,7 +109,7 @@ const Register = () => {
                 />
               </div>
               <div>
-              <label
+                <label
                   className="text-gray-800 font-semibold block my-2 text-md"
                   htmlFor="gstin"
                 >
@@ -123,7 +126,7 @@ const Register = () => {
                 />
               </div>
               <div>
-              <label
+                <label
                   className="text-gray-800 font-semibold block my-2 text-md"
                   htmlFor="address"
                 >
@@ -159,7 +162,7 @@ const Register = () => {
               <div>
                 <label
                   className="text-gray-800 font-semibold block my-2 text-md"
-                  htmlFfor="password"
+                  htmlFor="password"
                 >
                   Password
                 </label>

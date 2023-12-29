@@ -10,6 +10,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { UserContextProvider } from "./context/UserContext";
 import Pdf from "./pages/Pdf";
 import Profile from "./pages/Profile";
+import Invoices from "./pages/InvoiceList";
+import EditInvoice from "./pages/EditInvoice";
+
 
 const App = () => {
   return (
@@ -30,8 +33,26 @@ const App = () => {
             path="/reset-password/:token"
             element={<ResetPassword />}
           />
-          <Route exact path = "/pdfgenerate" element={<ProtectedRoute Component={Pdf}/>}/>
-          <Route exact path ="/me" element={<ProtectedRoute Component={Profile}/>}/>
+          <Route
+            exact
+            path="/pdfgenerate"
+            element={<ProtectedRoute Component={Pdf} />}
+          />
+          <Route
+            exact
+            path="/me"
+            element={<ProtectedRoute Component={Profile} />}
+          />
+          <Route
+            exact
+            path="/allinvoice"
+            element={<ProtectedRoute Component={Invoices} />}
+          />
+          <Route
+            exact
+            path="/editinvoice/:id"
+            element={<ProtectedRoute Component={EditInvoice} />}
+          />
         </Routes>
       </UserContextProvider>
     </>

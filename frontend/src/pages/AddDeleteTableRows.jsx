@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import TableRows from "./TableRows.jsx";
 import Item from "./Item.jsx";
 
 const AddDeleteTableRows = ({ updateData }) => {
@@ -31,14 +30,17 @@ const AddDeleteTableRows = ({ updateData }) => {
         itemQuantityp: 0,
         itemPricep: 0,
         itemCgstp: 0,
-        itemSgst: 0,
+        itemSgstp: 0,
       },
     ]);
   };
 
-  const deleteItem = (index) => {
+  const  deleteItem = (index, evnt) => {
+    console.log("index", index);
+    // console.log(itemNamep)
     const newItems = [...items];
     newItems.splice(index, 1);
+    // newItems = newItems.filter((item)=>{item.itemNamep!=itemNamep && item.itemHsnp!=itemHsnp});
     setItems(newItems);
   };
 
@@ -58,7 +60,7 @@ const AddDeleteTableRows = ({ updateData }) => {
             <div className="card-list grid gap-4 mt-8">
               <Item
                 items={items}
-                onDelete={() => deleteItem}
+                onDelete={deleteItem}
                 handleChange={handleChange}
               />
             </div>

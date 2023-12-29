@@ -11,10 +11,16 @@ const Item = ({ items, handleChange, onDelete }) => {
       itemSgstp,
     } = data;
 
-    return (
-      <div className="card flex flex-col rounded shadow-md bg-gray-100 p-4">
+    function func(index, event){
+      console.log(index);
+      onDelete(index, event);
+      console.log("ok")
+    }
 
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:md_grid-cols-1">
+    return (
+      <div className="card flex flex-col rounded shadow-md bg-gray-100 p-4" key={index}>
+
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
           <div>
             <label className="text-gray-500 flex ">Item Name</label>
             <input
@@ -52,7 +58,7 @@ const Item = ({ items, handleChange, onDelete }) => {
             <label className="text-gray-500 flex">Quantity</label>
             <input
               name="itemPricep"
-              placeholder="Name"
+              placeholder="Price"
               type="text"
             value={(itemPricep>=0)?itemPricep:''}
               className="border border-gray-500 rounded w-11/12 px-2"
@@ -85,7 +91,7 @@ const Item = ({ items, handleChange, onDelete }) => {
         <button
           type="button"
           className="mt-4 bg-red-500 text-white font-bold rounded py-1 px-2 hover:bg-red-700"
-          onClick={onDelete(index)}
+          onClick={(event)=>func(index, event)}
         >
           Delete
         </button>

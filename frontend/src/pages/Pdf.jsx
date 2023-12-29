@@ -4,18 +4,31 @@ import { saveAs } from "file-saver";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
 import Sidebar from "../components/Sidebar";
+import { URL } from "../url";
+import { useNavigate } from "react-router-dom";
 
 const Pdf = () => {
   const today = new Date();
   const [pdfUrl, setPdfUrl] = useState("");
   const [jpgUrl, setJpgUrl] = useState("");
   const [data, setData] = useState([]);
-  const {user, setUser}  = useContext(UserContext);
-  console.log(user);
+  const [docMade, setDocMade] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [invoiceNumber, setInvoiceNumber] = useState(0);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+  // console.log(user.user);
+
+
   const [info, setInfo] = useState({
     //name->firm name
-    firm: user==null ? {} : user.user._id,
-    invoiceNumber: 1,
+    id: user.user._id,
+    firmName: user.user.company,
+    firmAddress: user.user.address,
+    firmPincode: "221002",
+    firmContact: user.user.phone,
+    firmGstIn: user.user.gstin,
+    invoiceNumber: invoiceNumber,
     date: today,
     buyerName: "",
     buyerAddress: "",
@@ -24,32 +37,53 @@ const Pdf = () => {
     buyerContact: 9283749832,
     itemDetails: [],
   });
-  
+
+  // console.log("got value? : ", user);
+
+
   useEffect(()=>{
+    async function func(){
+    try {
+      const response = await axios.post(`${URL}/api/invoice/getinvoicenumber`, {id:user.user._id}, 
+      {
+        headers:{
+          "Content-Type": "application/json",
+        }
+      })
+      console.log("running", response.data.invCount);
+      setInvoiceNumber(response.data.invCount+1);
+      setIsLoading(false);
+      console.log(isLoading, invoiceNumber);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  func();
+  }, []);
+
+
+  useEffect(()=>{
+    console.log(invoiceNumber)
+    setInfo({...info, invoiceNumber})
+  }, [invoiceNumber])
+
+  useEffect(() => {
     console.log(info);
-  }, [info])
+  }, [info]);
 
-  useEffect(()=>{
-    console.log("updated pdf url : "+pdfUrl);
-  }, [pdfUrl])  
+  useEffect(() => {
+    console.log("updated pdf url : " + pdfUrl);
+  }, [pdfUrl]);
 
-  useEffect(()=>{
-    console.log("updated jpg url : "+jpgUrl);
-  }, [jpgUrl])
+  useEffect(() => {
+    console.log("updated jpg url : " + jpgUrl);
+  }, [jpgUrl]);
 
-  useEffect(()=>{
+  useEffect(() => {
+    console.log("got?", user);
     console.log("data ", data);
     console.log("item Details", info);
-  }, [data])
-
-  useEffect(()=>{
-    const logged = JSON.parse(localStorage.getItem('user'));
-    setUser(logged);
-    setInfo({...info, firm : logged.user._id});
-    // console.log(user);
-  }, [pdfUrl])
-
-  
+  }, [data]);
 
   const updateData = (newData) => {
     console.log("ok");
@@ -70,31 +104,48 @@ const Pdf = () => {
     console.log(info);
   };
 
-  const URL = "http://localhost:8800";
-
-  
   const successCallback = (response) => {
-    console.log("received pdf url : "+response.data.pdf_link);
-    console.log("recieved jpg url : "+response.data.jpg_link);
+    console.log("received pdf url : " + response.data.pdf_link);
+    console.log("recieved jpg url : " + response.data.jpg_link);
     setPdfUrl(response.data.pdf_link);
     setJpgUrl(response.data.jpg_link);
   };
 
   const formSubmission = async (e) => {
     e.preventDefault();
-    // setInfo({ ...info, itemDetails: [...data] });
+    console.log(data);
+    setInfo({ ...info, itemDetails: [...data] });
     console.log(info);
     console.log(JSON.stringify(info));
 
     try {
-      const response = await axios
-        .post(`${URL}/api/invoice/makepdf`, JSON.stringify(info), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }).then((response)=>{successCallback(response)})
-        
-      // console.log(response);
+      if (docMade) {
+        const response = await axios.post(
+          `${URL}/api/invoice/updatepdf`,
+          info,
+          {
+            header: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        successCallback(response);
+      } else {
+        const response = await axios.post(
+          `${URL}/api/invoice/makepdf`,
+          JSON.stringify(info),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setInfo({ ...info, id: response.data.invId });
+        successCallback(response);
+        console.log("res ", response);
+      }
+      setDocMade(true);
+
     } catch (error) {
       console.log(error);
     }
@@ -103,7 +154,9 @@ const Pdf = () => {
   };
 
   return (
-    <div className="bg-gray-100 py-8 px-4">
+    <div>
+      {isLoading && <p>Loading...</p>}
+    {!isLoading && <div className="bg-gray-100 py-8 px-4">
       <form className="space-y-8">
         <h1 className="text-3xl font-semibold text-gray-700 text-center underline ">
           Invoice Details
@@ -111,7 +164,7 @@ const Pdf = () => {
         <div className="flex items-center space-x-4">
           <span className="text-gray-500">Firm:</span>
           {/* name ->firm name */}
-          <span className="font-bold text-gray-700">{"Darish"}</span>
+          <span className="font-bold text-gray-700">{info.firmName}</span>
         </div>
         <div className="flex items-center space-x-4">
           <span className="text-gray-500">Invoice No.:</span>
@@ -119,7 +172,17 @@ const Pdf = () => {
         </div>
         <div className="flex items-center space-x-4">
           <span className="text-gray-500">Date:</span>
-          <span className="font-bold text-gray-700">{info.date.getDate() + "/" + info.date.getMonth() + "/" + (1900+info.date.getYear()).toString()}</span>
+          <span className="font-bold text-gray-700">
+            {info.date.getDate() +
+              "/" +
+              info.date.getMonth() +
+              "/" +
+              (1900 + info.date.getYear()).toString()}
+          </span>
+        </div>
+        <div className="flex items-center space-x-4">
+          <span className="text-gray-500">Contact:</span>
+          <span className="font-bold text-gray-700">{info.firmContact}</span>
         </div>
         <h2 className="text-lg font-semibold text-gray-700">
           Buyer Information
@@ -188,11 +251,24 @@ const Pdf = () => {
         </button>
       </form>
       <div className="grid grid-cols-5 cols">
-      {pdfUrl != "" && <img src={jpgUrl} className="w-10/12 col-span-4 border border-black my-10 mx-auto" />}
-      {/* {pdfUrl != "" && <iframe src={pdfUrl} className="w-10/12 col-span-4 border border-black my-10 mx-auto" />} */}
+        {pdfUrl != "" && (
+          <img
+            src={jpgUrl}
+            className="w-10/12 col-span-4 border border-black my-10 mx-auto"
+          />
+        )}
+        {/* {pdfUrl != "" && <iframe src={pdfUrl} className="w-10/12 col-span-4 border border-black my-10 mx-auto" />} */}
 
-      {pdfUrl != "" && <a href={jpgUrl} download="invoice.jpg"><button className="rounded-md bg-yellow-400 px-4 py-2 mx-auto my-auto h-min font-semibold text-black shadow-md hover:bg-yellow-500">Download</button></a>}
+        {pdfUrl != "" && (
+          <a href={jpgUrl} download="invoice.jpg">
+            <button className="rounded-md bg-yellow-400 px-4 py-2 mx-auto my-auto h-min font-semibold text-black shadow-md hover:bg-yellow-500">
+              Download
+            </button>
+          </a>
+        )}
+      </div>
     </div>
+}
     </div>
   );
 };

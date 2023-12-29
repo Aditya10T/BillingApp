@@ -14,6 +14,7 @@ const invoice = require("./routes/invoice");
 dotenv.config();
 
 // Database connection
+console.log(process);
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URL);

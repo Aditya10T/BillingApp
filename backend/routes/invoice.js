@@ -485,7 +485,7 @@ router.post(
       console.log(itemSgst);
       for (let i = 0; i < itemName.length; i++) {
         const arrayElement = [];
-        console.log(itemPrice[i]);
+        // console.log(type(itemPrice[i]));
         arrayElement.push((i + 1).toString());
         arrayElement.push(itemName[i]);
         arrayElement.push(itemHsn[i].toString());

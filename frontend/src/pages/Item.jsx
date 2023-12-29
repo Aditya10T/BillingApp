@@ -44,7 +44,7 @@ const Item = ({ items, handleChange, onDelete }) => {
             ></input>
           </div>
           <div>
-            <label className="text-gray-500 flex">Price</label>
+            <label className="text-gray-500 flex">Quantity</label>
             <input
               name="itemQuantityp"
               type="text"
@@ -55,7 +55,7 @@ const Item = ({ items, handleChange, onDelete }) => {
             ></input>
           </div>
           <div>
-            <label className="text-gray-500 flex">Quantity</label>
+            <label className="text-gray-500 flex">Price</label>
             <input
               name="itemPricep"
               placeholder="Price"

@@ -4,28 +4,38 @@ import { URL } from "../url";
 import axios from "axios";
 import Item from "./Item";
 
-
 const EditInvoice = () => {
+  //to load invoice id from URL
   const id = useParams();
+
+  //initialised variables
+  //loading false after data is fetched
   const [isLoading, setIsLoading] = useState(true);
+  //variable to store pdf and jpg url
   const [pdfUrl, setPdfUrl] = useState("");
   const [jpgUrl, setJpgUrl] = useState("");
-  const [data, setData] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user")).user;
-  console.log(user);
-
+  //variable to fetch invoice data
   const [invoice, setInvoice] = useState(null);
+  //variable to store itemDetails
+  const [items, setItems] = useState([]);
+  //variable to store complete info of the invoice
+  const [info, setInfo] = useState(null);
+  //loading user form local storage.
+  const user = JSON.parse(localStorage.getItem("user")).user;
+  console.log("User : \n", user);
 
+  //     1. This runs and fetches invoice data from backend
+  //        by calling another fucntion fetchInvoiceById.
   useEffect(() => {
     async function func(id) {
       const response = await fetchInvoiceById(id);
-      setInvoice(response.data[0]);
-      setIsLoading(false);
-    //   console.log(invoice[0]);
+      setInvoice(response.data[0]); //set invoice data in invoice.
+      setIsLoading(false); //set Loading to false.
     }
     func(id);
   }, [id]);
 
+  //      1.1 ) This function is called to fetch the invoice
   async function fetchInvoiceById(id) {
     // Simulating an API call
     const response = await axios.post(
@@ -37,19 +47,35 @@ const EditInvoice = () => {
         },
       }
     );
-    console.log(response);
     return response;
   }
 
+  //      2. This runs next
+  useEffect(() => {
+    //    2.1 When data is loaded only then we can set values in info
 
-  const [items, setItems] = useState([]);
+    //    First we set value in items
+    if (!isLoading && invoice != null) {
+      console.log("State of Loading : \n", isLoading);
+      console.log("Loaded Invoice : \n", invoice);
+      for (let i = 0; i < invoice.itemName.length; i++) {
+        console.log("ItemName : ", invoice.itemName[i]);
+        var newItems = items;
+        newItems.push({
+          itemNamep: invoice.itemName[i],
+          itemHsnp: invoice.itemHsn[i],
+          itemQuantityp: invoice.itemQuantity[i],
+          itemPricep: invoice.itemPrice[i],
+          itemCgstp: invoice.itemCgst[i],
+          itemSgstp: invoice.itemSgst[i],
+        });
+        setItems(newItems);
+      }
+    }
 
-
-  useEffect(()=>{
-    console.log(isLoading);
-    console.log(invoice);
-    if(!isLoading && invoice!=null){
-        setInfo({
+    // when items is set then using it to fill info
+    if (!isLoading && items) {
+      setInfo({
         id: id.id,
         firmName: user.company,
         firmAddress: user.address,
@@ -63,67 +89,26 @@ const EditInvoice = () => {
         buyerPincode: 0,
         buyerGstIn: invoice.buyerGstIn,
         buyerContact: 9283749832,
-        itemDetails: invoice.itemName.map((itemName) => ({
-          itemNamep: itemName,
-          itemHsnp: 0, // Assuming default values for other fields
-          itemQuantityp: 0,
-          itemPricep: 0,
-          itemCgstp: 0,
-          itemSgstp: 0,
-        }))
-    });
-    setItems(invoice.itemName.map((itemName) => ({
-      itemNamep: itemName,
-      itemHsnp: 0, // Assuming default values for other fields
-      itemQuantityp: 0,
-      itemPricep: 0,
-      itemCgstp: 0,
-      itemSgstp: 0,
-    })))
+        itemDetails: items,
+      });
+    }
+  }, [isLoading, invoice]);
 
-    setData(invoice.itemName.map((itemName) => ({
-      itemNamep: itemName,
-      itemHsnp: 0, // Assuming default values for other fields
-      itemQuantityp: 0,
-      itemPricep: 0,
-      itemCgstp: 0,
-      itemSgstp: 0,
-    })))
+  // if any change in info, update it in the current batch
+  useEffect(() => {
+    console.log("Updated info:\n", info);
+  }, [info]);
 
+  // if any chanfge in items, update it in the current batch
+  useEffect(() => {
+    console.log("Update items : \n ", items);
+    setInfo({ ...info, itemDetails: items });
+  }, [items]);
 
-    // for(let i = 0;i<invoice.itemName.length;i++)
-    // {
-        // console.log(invoice.itemName[i]);
-        // var newItems = items;
-        // newItems.push({
-        //     itemNamep: invoice.itemName[i],
-        //     itemHsnp: invoice.itemHsn[i],
-        //     itemQuantityp: invoice.itemQuantity[i],
-        //     itemPricep: invoice.itemPrice[i],
-        //     itemCgstp: invoice.itemCgst[i],
-        //     itemSgstp: invoice.itemSgst[i],
-        // });
-        // setItems(newItems);
-        // console.log("ok");
-    // setData([...items]);
-    // setInfo({ ...info, itemDetails: [...items] });
-    // console.log("item details: ", info.itemDetails)
-    // console.log("new data", items);
-        // console.log("items", items)
-    // }
-    
-    
-}
-  }, [isLoading, invoice])
-
-  const [info, setInfo] = useState(null);
-
-  
-
-  
-
+  // Any change in the upper fields (non table),
+  // are handled by this function.
   const inputChange = (e) => {
-    console.log(e.target.name, e.target.value);
+    console.log("Changing ", e.target.name, " = ", e.target.value);
     setInfo({
       ...info,
       [e.target.name]:
@@ -131,10 +116,10 @@ const EditInvoice = () => {
           ? parseFloat(e.target.value)
           : e.target.value,
     });
-    console.log(info);
   };
 
-
+  //  When new item is to be added user clicks on the button and this funciton triggers.
+  //  Creates a new element in the items array
   const addItem = () => {
     setItems([
       ...items,
@@ -149,32 +134,27 @@ const EditInvoice = () => {
     ]);
   };
 
-
+  //  To delete an item from the invoice, this function is triggered.
   const deleteItem = (index) => {
     const newItems = [...items];
     newItems.splice(index, 1);
     setItems(newItems);
   };
 
-
-
-  const successCallback = (response) => {
-    console.log("received pdf url : " + response.data.pdf_link);
-    console.log("recieved jpg url : " + response.data.jpg_link);
-    setPdfUrl(response.data.pdf_link);
-    setJpgUrl(response.data.jpg_link);
+  //
+  const handleChange = (index, evnt) => {
+    const { name, value } = evnt.target;
+    const itemInput = [...items];
+    itemInput[index][name] =
+      name == "itemNamep" ? value : value >= 0 ? parseFloat(value) : 0;
+    setItems(itemInput);
+    evnt.preventDefault();
   };
 
-  useEffect(() => {
-    console.log(info);
-  }, [info]);
-
-
+  //   when final pdf generate button is clicked then this function is called.
   const formSubmission = async (e) => {
     e.preventDefault();
-    console.log("final data ", data);
-    console.log("final items", items)
-    // setInfo({ ...info, itemDetails: data });
+    console.log("final items", items);
     console.log("final info", info);
     console.log(JSON.stringify(info));
 
@@ -188,39 +168,21 @@ const EditInvoice = () => {
         .then((response) => {
           successCallback(response);
         });
-
-      // console.log(response);
     } catch (error) {
       console.log(error);
     }
-    // console.log(pdfUrl);
     e.preventDefault();
   };
 
-
-  const handleChange = (index, evnt) => {
-    const { name, value } = evnt.target;
-    console.log("skdj");
-    const itemInput = [...items];
-    itemInput[index][name] =
-      name == "itemNamep" ? value : value >= 0 ? parseFloat(value) : 0;
-    setItems(itemInput);
-    updateData(items);
-    setInfo((prevInfo) =>({
-      ...prevInfo,
-      itemDetails : [
-        ...prevInfo.itemDetails.slice(0, index), 
-        { ...prevInfo.itemDetails[index], [name]: value}, 
-        ...prevInfo.itemDetails.slice(index+1),
-
-      ]
-    }));
-
-    evnt.preventDefault();
+  // function to just check and set the recieved URLs.
+  const successCallback = (response) => {
+    console.log("received pdf url : " + response.data.pdf_link);
+    console.log("recieved jpg url : " + response.data.jpg_link);
+    setPdfUrl(response.data.pdf_link);
+    setJpgUrl(response.data.jpg_link);
   };
 
- 
-
+  //update the URLs in the current batch iteslf.
   useEffect(() => {
     console.log("updated pdf url : " + pdfUrl);
   }, [pdfUrl]);
@@ -229,162 +191,153 @@ const EditInvoice = () => {
     console.log("updated jpg url : " + jpgUrl);
   }, [jpgUrl]);
 
-  useEffect(() => {
-    console.log("got?", user);
-    console.log("data ", data);
-    console.log("item Details", info);
-  }, [data]);
-
-  const updateData = (newData) => {
-    console.log("ok");
-    setData([...newData]);
-    setInfo({ ...info, itemDetails: [...data] });
-    console.log("item details: ", info.itemDetails)
-    console.log("new data", data);
-  };
-
-
-
+  //  UI
   return (
     <div className="bg-gray-100 py-8 px-4">
-    {isLoading && <p>Loading...</p>}
-    {!isLoading && info!=null && <div>
-      <form className="space-y-8">
-        <h1 className="text-3xl font-semibold text-gray-700 text-center underline ">
-          Invoice Details
-        </h1>
-        <div className="flex items-center space-x-4">
-          <span className="text-gray-500">Firm:</span>
-          {/* name ->firm name */}
-          <span className="font-bold text-gray-700">{user.company}</span>
-        </div>
-        <div className="flex items-center space-x-4">
-          <span className="text-gray-500">Invoice No.:</span>
-          <span className="font-bold text-gray-700">{invoice.invoiceNumber}</span>
-        </div>
-        <div className="flex items-center space-x-4">
-          <span className="text-gray-500">Date:</span>
-          <span className="font-bold text-gray-700">{invoice.date.substr(0, 10)}</span>
-        </div>
-        <div className="flex items-center space-x-4">
-          <span className="text-gray-500">Contact:</span>
-          <span className="font-bold text-gray-700">{user.phone}</span>
-        </div>
-        <h2 className="text-lg font-semibold text-gray-700">
-          Buyer Information
-        </h2>
-        <div className="flex flex-col space-y-2">
-          <label className="text-gray-500">Buyer Name:</label>
-          <input
-            type="text"
-            name="buyerName"
-            placeholder="Enter Buyer Name"
-            onChange={inputChange}
-            value={info.buyerName}
-            required
-            className="rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700"
-          />
-          <label className="text-gray-500">Buyer Address:</label>
-          <textarea
-            rows="3"
-            type="text"
-            name="buyerAddress"
-            placeholder="Enter Buyer Address"
-            onChange={inputChange}
-            value={info.buyerAddress}
-            required
-            className="rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700"
-          />
-          <div className="grid sm:grid-cols-1">
-            <div className="">
-              <label className="text-gray-500 mr-2 flex">Buyer Pincode:</label>
-              <input
-                type="number"
-                name="buyerPincode"
-                placeholder="Enter Pincode"
-                onChange={inputChange}
-                value = {info.buyerPincode}
-                required
-                className="rounded-md border border-gray-300 bg-gray-100 my-2 px-3 py-2 text-gray-700"
-              />
+      {isLoading && <p>Loading...</p>}
+      {!isLoading && info != null && (
+        <div>
+          <form className="space-y-8">
+            <h1 className="text-3xl font-semibold text-gray-700 text-center underline ">
+              Invoice Details
+            </h1>
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-500">Firm:</span>
+              {/* name ->firm name */}
+              <span className="font-bold text-gray-700">{user.company}</span>
             </div>
-            <div>
-              <label className="text-gray-500 flex">Buyer GSTIN:</label>
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-500">Invoice No.:</span>
+              <span className="font-bold text-gray-700">
+                {invoice.invoiceNumber}
+              </span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-500">Date:</span>
+              <span className="font-bold text-gray-700">
+                {invoice.date.substr(0, 10)}
+              </span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-500">Contact:</span>
+              <span className="font-bold text-gray-700">{user.phone}</span>
+            </div>
+            <h2 className="text-lg font-semibold text-gray-700">
+              Buyer Information
+            </h2>
+            <div className="flex flex-col space-y-2">
+              <label className="text-gray-500">Buyer Name:</label>
               <input
                 type="text"
-                name="buyerGstIn"
-                placeholder="Enter GSTIN"
+                name="buyerName"
+                placeholder="Enter Buyer Name"
                 onChange={inputChange}
-                value = {info.buyerGstIn}
+                value={info.buyerName}
                 required
-                className="rounded-md border border-gray-300 bg-gray-100 my-2 px-3 py-2 text-gray-700"
+                className="rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700"
               />
-            </div>
-          </div>
-          <label className="text-gray-500">Buyer Contact:</label>
-          <input
-            type="tel"
-            name="buyerContact"
-            placeholder="Enter Contact Number"
-            onChange={inputChange}
-            value={info.buyerContact}
-            required
-            className="rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700"
-          />
-        </div>
-
-        <div>
-          <div>
-            <div className="mt-4 flex flex-col w-full  rounded overflow-hidden">
-              <div className="container mx-auto my-8">
-                <button
-                  type="button"
-                  className="rounded-lg bg-green-500 text-white font-bold py-2 px-4 hover:bg-green-700"
-                  onClick={addItem}
-                >
-                  Add Item
-                </button>
-                <div className="card-list grid gap-4 mt-8" >
-                  <Item
-                    items={items}
-                    onDelete={deleteItem}
-                    handleChange={handleChange}
+              <label className="text-gray-500">Buyer Address:</label>
+              <textarea
+                rows="3"
+                type="text"
+                name="buyerAddress"
+                placeholder="Enter Buyer Address"
+                onChange={inputChange}
+                value={info.buyerAddress}
+                required
+                className="rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700"
+              />
+              <div className="grid sm:grid-cols-1">
+                <div className="">
+                  <label className="text-gray-500 mr-2 flex">
+                    Buyer Pincode:
+                  </label>
+                  <input
+                    type="number"
+                    name="buyerPincode"
+                    placeholder="Enter Pincode"
+                    onChange={inputChange}
+                    value={info.buyerPincode}
+                    required
+                    className="rounded-md border border-gray-300 bg-gray-100 my-2 px-3 py-2 text-gray-700"
+                  />
+                </div>
+                <div>
+                  <label className="text-gray-500 flex">Buyer GSTIN:</label>
+                  <input
+                    type="text"
+                    name="buyerGstIn"
+                    placeholder="Enter GSTIN"
+                    onChange={inputChange}
+                    value={info.buyerGstIn}
+                    required
+                    className="rounded-md border border-gray-300 bg-gray-100 my-2 px-3 py-2 text-gray-700"
                   />
                 </div>
               </div>
+              <label className="text-gray-500">Buyer Contact:</label>
+              <input
+                type="tel"
+                name="buyerContact"
+                placeholder="Enter Contact Number"
+                onChange={inputChange}
+                value={info.buyerContact}
+                required
+                className="rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700"
+              />
             </div>
+
+            <div>
+              <div>
+                <div className="mt-4 flex flex-col w-full  rounded overflow-hidden">
+                  <div className="container mx-auto my-8">
+                    <button
+                      type="button"
+                      className="rounded-lg bg-green-500 text-white font-bold py-2 px-4 hover:bg-green-700"
+                      onClick={addItem}
+                    >
+                      Add Item
+                    </button>
+                    <div className="card-list grid gap-4 mt-8">
+                      <Item
+                        items={items}
+                        onDelete={deleteItem}
+                        handleChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              className="rounded-md bg-yellow-400 px-4 py-2 font-semibold text-black shadow-md hover:bg-yellow-500"
+              type="submit"
+              onClick={formSubmission}
+            >
+              Generate PDF
+            </button>
+          </form>
+          <div className="grid grid-cols-5 cols">
+            {pdfUrl != "" && (
+              <img
+                src={jpgUrl}
+                className="w-10/12 col-span-4 border border-black my-10 mx-auto"
+              />
+            )}
+            {/* {pdfUrl != "" && <iframe src={pdfUrl} className="w-10/12 col-span-4 border border-black my-10 mx-auto" />} */}
+
+            {pdfUrl != "" && (
+              <a href={jpgUrl} download="invoice.jpg">
+                <button className="rounded-md bg-yellow-400 px-4 py-2 mx-auto my-auto h-min font-semibold text-black shadow-md hover:bg-yellow-500">
+                  Download
+                </button>
+              </a>
+            )}
           </div>
         </div>
-
-        <button
-          className="rounded-md bg-yellow-400 px-4 py-2 font-semibold text-black shadow-md hover:bg-yellow-500"
-          type="submit"
-          onClick={formSubmission}
-        >
-          Generate PDF
-        </button>
-      </form>
-      <div className="grid grid-cols-5 cols">
-        {pdfUrl != "" && (
-          <img
-            src={jpgUrl}
-            className="w-10/12 col-span-4 border border-black my-10 mx-auto"
-          />
-        )}
-        {/* {pdfUrl != "" && <iframe src={pdfUrl} className="w-10/12 col-span-4 border border-black my-10 mx-auto" />} */}
-
-        {pdfUrl != "" && (
-          <a href={jpgUrl} download="invoice.jpg">
-            <button className="rounded-md bg-yellow-400 px-4 py-2 mx-auto my-auto h-min font-semibold text-black shadow-md hover:bg-yellow-500">
-              Download
-            </button>
-          </a>
-        )}
-      </div>
-      </div>
-}
+      )}
     </div>
-        
   );
 };
 

@@ -52,8 +52,8 @@ const Register = () => {
           </h3>
         </div>
         <div className="flex grow justify-center items-center bg-indigo-100">
-          <div className="lg:w-2/5 md:w-2/3 w-[74%]">
-            <div className="bg-white p-10 rounded-lg shadow-lg w-full">
+          <div className="lg:w-2/5 md:w-2/3 w-[74%] ">
+            <div className="bg-white p-10 rounded-lg shadow-lg w-full ">
               <h1 className="text-center text-2xl mb-2 text-gray-600 font-bold font-sans">
                 Register
               </h1>
@@ -74,7 +74,8 @@ const Register = () => {
                   required
                 />
               </div>
-              <div className="">
+              <div className="grid grid-cols-2">
+              <div className="col-span-1 mr-2">
                 <label
                   className="text-gray-800 font-semibold block my-2 text-md"
                   htmlFor="company"
@@ -82,7 +83,7 @@ const Register = () => {
                   Company
                 </label>
                 <input
-                  className="w-full bg-gray-100 px-4 py-1 rounded-lg focus:outline-indigo-500"
+                  className=" bg-gray-100 px-4 py-1 rounded-lg focus:outline-indigo-500"
                   type="text"
                   name="company"
                   id="company"
@@ -91,7 +92,7 @@ const Register = () => {
                   required
                 />
               </div>
-              <div>
+              <div className="col-span-1 ml-2">
                 <label
                   className="text-gray-800 font-semibold block my-2 text-md"
                   htmlFor="phone"
@@ -107,6 +108,7 @@ const Register = () => {
                   onChange={(e) => setPhone(e.target.value)}
                   required
                 />
+              </div>
               </div>
               <div>
                 <label

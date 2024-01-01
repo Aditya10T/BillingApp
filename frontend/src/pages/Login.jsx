@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { URL } from "../url";
+import { myURL } from "../url";
 import { UserContext } from "../context/UserContext";
 
 const Login = () => {
@@ -14,7 +14,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-       URL+"/api/v1/login",
+       myURL+"/api/v1/login",
         { email, password },
         { withCredentials: true }
       );

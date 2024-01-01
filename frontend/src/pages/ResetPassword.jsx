@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { URL } from "../url";
+import { myURL } from "../url";
 
 const ResetPassword = () => {
 
@@ -14,7 +14,7 @@ const ResetPassword = () => {
  const handleClick = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(URL+"/api/v1/password/reset/"+token,{password,confirmPassword});
+      const res = await axios.post(myURL+"/api/v1/password/reset/"+token,{password,confirmPassword});
       alert("Password changed successfully");
       navigate("/login");
     } catch (error) {

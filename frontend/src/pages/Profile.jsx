@@ -1,7 +1,7 @@
 import Sidebar from "../components/Sidebar";
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { URL } from "../url";
+import { myURL } from "../url";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
@@ -26,7 +26,7 @@ const Profile = () => {
     e.preventDefault();
     try {
       const res = axios.put(
-      URL+ "/api/v1/me/update",
+      myURL+ "/api/v1/me/update",
         { name, email,company,address,gstin,phone },
         { withCredentials: true }
       );
@@ -40,7 +40,7 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get(URL+"/api/v1/me", {
+      const res = await axios.get(myURL+"/api/v1/me", {
         withCredentials: true,
       });
       //address, contact, pincode, gstin
@@ -68,7 +68,7 @@ const Profile = () => {
     console.log(myForm)
 
     try {
-      const res = await axios.put(URL+'/api/v1/password/update',myForm,{headers:{"Content-Type":"application/json"},withCredentials:true})
+      const res = await axios.put(myURL+'/api/v1/password/update',myForm,{headers:{"Content-Type":"application/json"},withCredentials:true})
       alert("Password changed Successfully")
       setVis(false);
       window.location.reload();

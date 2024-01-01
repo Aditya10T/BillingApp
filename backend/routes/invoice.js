@@ -5,6 +5,7 @@ const Invoice = require("../models/Invoice");
 const User = require("../models/userModel");
 const { body, validationResult } = require("express-validator");
 require("jspdf-autotable");
+const fs = require('fs') 
 //not adding middleware
 //check InvoiceModel variable name if get error
 
@@ -15,6 +16,20 @@ cloudinary.config({
   api_key: "382357723465976",
   api_secret: "LG9qTeHHWcFuH4F9QukgRWqdrJY",
 });
+
+
+// ---------------------------------------------------------------
+const AWS = require('aws-sdk');
+
+AWS.config.update({
+  accessKeyId: 'AKIAXNNTXM6U5TXQZKMZ',
+  secretAccessKey: 'IBJCHaW+uCfU6kT09kppaMIl3mb8ndAnRi4bS2s7',
+  region: 'ap-south-1', // e.g., 'us-east-1'
+});
+
+// --------------------------------------------------------------
+
+const s3 = new AWS.S3();
 
 //funtion to convert number(integer) into words
 function valueInWords(value) {
@@ -275,6 +290,50 @@ router.post(
       doc.text(105, 290, "This invoice is computer generated.", "center");
       doc.save("a4.pdf");
 
+
+
+      const pdfBuffer = fs.readFileSync('./a4.pdf');
+
+      // const params = {
+      //   Bucket: 'billingapp7',
+      //   Key: 'invoice.pdf', // Filename to store in S3
+      //   Body: pdfBuffer, // Or pdfStream if using a stream
+      // };
+      
+      // s3.upload(params, (err, data) => {
+      //   if (err) {
+      //     console.error('Error uploading PDF:', err);
+      //   } else {
+      //     console.log('PDF uploaded successfully!');
+      //     console.log(data);
+      //   }
+      // });
+
+      // const params2 = {
+      //   Bucket: 'billingapp7',
+      //   Key: 'invoice.pdf', // Filename of the PDF in S3
+      // };
+      
+
+      // s3.getObject(params2, (err, data) => {
+      //   if (err) {
+      //     console.error('Error downloading PDF:', err);
+      //   } else {
+      //     const pdfBuffer = data.Body;
+      //     console.log(pdfBuffer);
+      //     fs.writeFile('invoice.pdf', pdfBuffer, (err) => {
+      //       if (err) {
+      //         console.error('Error saving PDF:', err);
+      //       } else {
+      //         console.log('PDF saved successfully!');
+      //       }
+      //     });
+          
+      //     // Use the PDF buffer
+      //   }
+      // });
+      
+
       let pdf_link = "",
         jpg_link = "";
 
@@ -320,7 +379,9 @@ router.post(
         pdf_link: pdf_link,
         jpg_link: jpg_link,
         invId: latestInv._id,
+        pdfData: pdfBuffer
       });
+      // return res.send("Done!");
     } catch (error) {
       console.log("moye moye!");
       console.log(error);
@@ -564,8 +625,9 @@ router.post(
           },
         }
       );
+      const pdfBuffer = fs.readFileSync('./a4.pdf');
 
-      return res.json({ pdf_link: pdf_link, jpg_link: jpg_link });
+      return res.json({ pdf_link: pdf_link, jpg_link: jpg_link, pdfData: pdfBuffer });
     } catch (error) {
       console.log("Error in updation : \n", error);
     }

@@ -57,10 +57,6 @@ const InvoiceSchema = new Schema({
         type : Array,
         required : true
     },
-    pdfLink:{
-        type : String,
-        required : true
-    },
     totalAmount:{
         type: Number,
         required: true,

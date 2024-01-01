@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { URL } from "../url";
+import { myURL } from "../url";
 import axios from "axios";
 import Item from "./Item";
+import { saveAs } from "file-saver";
 
 const EditInvoice = () => {
   //to load invoice id from URL
@@ -11,9 +12,10 @@ const EditInvoice = () => {
   //initialised variables
   //loading false after data is fetched
   const [isLoading, setIsLoading] = useState(true);
-  //variable to store pdf and jpg url
-  const [pdfUrl, setPdfUrl] = useState("");
-  const [jpgUrl, setJpgUrl] = useState("");
+  // disable buttons while invoice is loading 
+  const [buttonsDisabled, setButtonsDisabled] = useState(false);
+  //variable to store pdf url
+  const [newPdfUrl, setNewPdfUrl] = useState("");
   //variable to fetch invoice data
   const [invoice, setInvoice] = useState(null);
   //variable to store itemDetails
@@ -39,7 +41,7 @@ const EditInvoice = () => {
   async function fetchInvoiceById(id) {
     // Simulating an API call
     const response = await axios.post(
-      URL + "/api/invoice/invoicedetails",
+      myURL + "/api/invoice/invoicedetails",
       JSON.stringify(id),
       {
         headers: {
@@ -58,16 +60,16 @@ const EditInvoice = () => {
     if (!isLoading && invoice != null) {
       console.log("State of Loading : \n", isLoading);
       console.log("Loaded Invoice : \n", invoice);
+      var newItems = [];
       for (let i = 0; i < invoice.itemName.length; i++) {
         console.log("ItemName : ", invoice.itemName[i]);
-        var newItems = items;
         newItems.push({
           itemNamep: invoice.itemName[i],
           itemHsnp: invoice.itemHsn[i],
           itemQuantityp: invoice.itemQuantity[i],
           itemPricep: invoice.itemPrice[i],
           itemCgstp: invoice.itemCgst[i],
-          itemSgstp: invoice.itemSgst[i],
+          itemSgstp: invoice.itemSgst[i],         
         });
         setItems(newItems);
       }
@@ -154,13 +156,14 @@ const EditInvoice = () => {
   //   when final pdf generate button is clicked then this function is called.
   const formSubmission = async (e) => {
     e.preventDefault();
+    setButtonsDisabled(true);
     console.log("final items", items);
     console.log("final info", info);
     console.log(JSON.stringify(info));
 
     try {
       const response = await axios
-        .post(`${URL}/api/invoice/updatepdf`, JSON.stringify(info), {
+        .post(`${myURL}/api/invoice/updatepdf`, JSON.stringify(info), {
           headers: {
             "Content-Type": "application/json",
           },
@@ -176,20 +179,25 @@ const EditInvoice = () => {
 
   // function to just check and set the recieved URLs.
   const successCallback = (response) => {
-    console.log("received pdf url : " + response.data.pdf_link);
-    console.log("recieved jpg url : " + response.data.jpg_link);
-    setPdfUrl(response.data.pdf_link);
-    setJpgUrl(response.data.jpg_link);
+    const blob = new Blob([new Uint8Array(response.data.pdfData.data).buffer], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    setNewPdfUrl(url);
+    setButtonsDisabled(false);
   };
 
-  //update the URLs in the current batch iteslf.
-  useEffect(() => {
-    console.log("updated pdf url : " + pdfUrl);
-  }, [pdfUrl]);
+  const downloadPDF = (e)=>{
+    e.preventDefault();
+    saveAs(newPdfUrl, `${info.firmGstIn}_Invoice${info.invoiceNumber}.pdf`);
+  }
 
-  useEffect(() => {
-    console.log("updated jpg url : " + jpgUrl);
-  }, [jpgUrl]);
+  //update the URL in the current batch iteslf.
+  useEffect(()=>{
+    console.log("Updated new pdf url :", newPdfUrl);
+  }, [newPdfUrl])
+
+  useEffect(()=>{
+    console.log(buttonsDisabled);
+  }, [buttonsDisabled])
 
   //  UI
   return (
@@ -313,28 +321,21 @@ const EditInvoice = () => {
             <button
               className="rounded-md bg-yellow-400 px-4 py-2 font-semibold text-black shadow-md hover:bg-yellow-500"
               type="submit"
+              disabled={buttonsDisabled}
               onClick={formSubmission}
             >
               Generate PDF
             </button>
-          </form>
-          <div className="grid grid-cols-5 cols">
-            {pdfUrl != "" && (
-              <img
-                src={jpgUrl}
-                className="w-10/12 col-span-4 border border-black my-10 mx-auto"
-              />
-            )}
-            {/* {pdfUrl != "" && <iframe src={pdfUrl} className="w-10/12 col-span-4 border border-black my-10 mx-auto" />} */}
-
-            {pdfUrl != "" && (
-              <a href={jpgUrl} download="invoice.jpg">
-                <button className="rounded-md bg-yellow-400 px-4 py-2 mx-auto my-auto h-min font-semibold text-black shadow-md hover:bg-yellow-500">
-                  Download
-                </button>
-              </a>
-            )}
-          </div>
+          {newPdfUrl && <button
+        className="rounded-md bg-green-500  mx-4 my-2 px-4 py-2 font-semibold text-white shadow-md hover:bg-green-600"
+        onClick={downloadPDF}
+        disabled={buttonsDisabled}>
+          Download PDF
+        </button>}
+      </form>
+      <div className="bg-gray-100-300 text-center my-2 ">
+        {newPdfUrl && <iframe src={newPdfUrl} className="pdf-container mx-auto"   />}
+        </div>
         </div>
       )}
     </div>

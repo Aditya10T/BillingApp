@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import { URL } from "../url";
+import { myURL } from "../url";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +16,7 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      const res = await axios.post(URL + "/api/v1/register", {
+      const res = await axios.post(myURL + "/api/v1/register", {
         name,
         company,
         phone,

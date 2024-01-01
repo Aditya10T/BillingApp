@@ -1,22 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddDeleteTableRows from "./AddDeleteTableRows";
 import { saveAs } from "file-saver";
 import axios from "axios";
-import { UserContext } from "../context/UserContext";
-import Sidebar from "../components/Sidebar";
-import { URL } from "../url";
-import { useNavigate } from "react-router-dom";
+import { myURL } from "../url";
+import '../App.css'
 
 const Pdf = () => {
   const today = new Date();
-  const [pdfUrl, setPdfUrl] = useState("");
-  const [jpgUrl, setJpgUrl] = useState("");
+  // disable buttons while invoice is loading 
+  const [buttonsDisabled, setButtonsDisabled] = useState(false);
   const [data, setData] = useState([]);
   const [docMade, setDocMade] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [invoiceNumber, setInvoiceNumber] = useState(0);
   const user = JSON.parse(localStorage.getItem("user"));
-  const navigate = useNavigate();
+  const [newPdfUrl, setNewPdfUrl] = useState("");
   // console.log(user.user);
 
 
@@ -44,7 +42,7 @@ const Pdf = () => {
   useEffect(()=>{
     async function func(){
     try {
-      const response = await axios.post(`${URL}/api/invoice/getinvoicenumber`, {id:user.user._id}, 
+      const response = await axios.post(`${myURL}/api/invoice/getinvoicenumber`, {id:user.user._id}, 
       {
         headers:{
           "Content-Type": "application/json",
@@ -72,18 +70,18 @@ const Pdf = () => {
   }, [info]);
 
   useEffect(() => {
-    console.log("updated pdf url : " + pdfUrl);
-  }, [pdfUrl]);
-
-  useEffect(() => {
-    console.log("updated jpg url : " + jpgUrl);
-  }, [jpgUrl]);
+    console.log("updated new pdf url : " + newPdfUrl);
+  }, [newPdfUrl]);
 
   useEffect(() => {
     console.log("got?", user);
     console.log("data ", data);
     console.log("item Details", info);
   }, [data]);
+
+  useEffect(()=>{
+    console.log(buttonsDisabled);
+  }, [buttonsDisabled]);
 
   const updateData = (newData) => {
     console.log("ok");
@@ -105,14 +103,17 @@ const Pdf = () => {
   };
 
   const successCallback = (response) => {
-    console.log("received pdf url : " + response.data.pdf_link);
-    console.log("recieved jpg url : " + response.data.jpg_link);
-    setPdfUrl(response.data.pdf_link);
-    setJpgUrl(response.data.jpg_link);
+    console.log(response.data.pdfData.data);
+    const blob = new Blob([new Uint8Array(response.data.pdfData.data).buffer], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    setNewPdfUrl(url);
+    setButtonsDisabled(false);
+    console.log(url);
   };
 
   const formSubmission = async (e) => {
     e.preventDefault();
+    setButtonsDisabled(true);
     console.log(data);
     setInfo({ ...info, itemDetails: [...data] });
     console.log(info);
@@ -121,7 +122,7 @@ const Pdf = () => {
     try {
       if (docMade) {
         const response = await axios.post(
-          `${URL}/api/invoice/updatepdf`,
+          `${myURL}/api/invoice/updatepdf`,
           info,
           {
             header: {
@@ -132,7 +133,7 @@ const Pdf = () => {
         successCallback(response);
       } else {
         const response = await axios.post(
-          `${URL}/api/invoice/makepdf`,
+          `${myURL}/api/invoice/makepdf`,
           JSON.stringify(info),
           {
             headers: {
@@ -149,9 +150,13 @@ const Pdf = () => {
     } catch (error) {
       console.log(error);
     }
-    // console.log(pdfUrl);
     e.preventDefault();
   };
+
+  const downloadPDF = (e)=>{
+    e.preventDefault();
+    saveAs(newPdfUrl, `${info.firmGstIn}_Invoice${info.invoiceNumber}.pdf`);
+  }
 
   return (
     <div>
@@ -173,9 +178,9 @@ const Pdf = () => {
         <div className="flex items-center space-x-4">
           <span className="text-gray-500">Date:</span>
           <span className="font-bold text-gray-700">
-            {info.date.getDate() +
+            {info.date.getDate().toString() +
               "/" +
-              info.date.getMonth() +
+              (info.date.getMonth()+1) +
               "/" +
               (1900 + info.date.getYear()).toString()}
           </span>
@@ -243,30 +248,23 @@ const Pdf = () => {
         </div>
         <AddDeleteTableRows updateData={updateData} />
         <button
-          className="rounded-md bg-yellow-400 px-4 py-2 font-semibold text-black shadow-md hover:bg-yellow-500"
+          className="rounded-md bg-yellow-400 my-2 px-4 py-2 font-semibold text-black shadow-md hover:bg-yellow-500"
           type="submit"
+          disabled={buttonsDisabled}
           onClick={formSubmission}
         >
           Generate PDF
         </button>
+        {newPdfUrl && <button
+        className="rounded-md bg-green-500  mx-4 my-2 px-4 py-2 font-semibold text-white shadow-md hover:bg-green-600"
+        onClick={downloadPDF}
+        disabled={buttonsDisabled}>
+          Download PDF
+        </button>}
       </form>
-      <div className="grid grid-cols-5 cols">
-        {pdfUrl != "" && (
-          <img
-            src={jpgUrl}
-            className="w-10/12 col-span-4 border border-black my-10 mx-auto"
-          />
-        )}
-        {/* {pdfUrl != "" && <iframe src={pdfUrl} className="w-10/12 col-span-4 border border-black my-10 mx-auto" />} */}
-
-        {pdfUrl != "" && (
-          <a href={jpgUrl} download="invoice.jpg">
-            <button className="rounded-md bg-yellow-400 px-4 py-2 mx-auto my-auto h-min font-semibold text-black shadow-md hover:bg-yellow-500">
-              Download
-            </button>
-          </a>
-        )}
-      </div>
+      <div className="bg-gray-100-300 text-center my-2 ">
+        {newPdfUrl && <iframe src={newPdfUrl} className="pdf-container mx-auto"   />}
+        </div>
     </div>
 }
     </div>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { URL } from "../url"
+import { myURL } from "../url"
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 

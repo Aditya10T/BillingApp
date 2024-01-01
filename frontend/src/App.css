@@ -1,0 +1,7 @@
+iframe{
+    width: 100%;
+}
+.pdf-container{
+    position:relative;
+    aspect-ratio:210/320;
+}

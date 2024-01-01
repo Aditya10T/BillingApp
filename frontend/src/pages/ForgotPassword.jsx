@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { URL } from "../url";
+import { myURL } from "../url";
 
 const ForgotPassword = () => {
   const [done, setDone] = useState(false);
@@ -9,7 +9,7 @@ const ForgotPassword = () => {
 
   const handleEmail = async () => {
     try {
-      const res = await axios.post(URL+"/api/v1/password/forgot", { email });
+      const res = await axios.post(myURL+"/api/v1/password/forgot", { email });
       setDone(true);
     } catch (error) {
       if(error.response.status===404){

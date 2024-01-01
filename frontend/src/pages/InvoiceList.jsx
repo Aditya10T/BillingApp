@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import {useNavigate} from "react-router-dom"
-import { URL } from "../url";
+import { myURL } from "../url";
 import EditInvoice from "./EditInvoice";
 
 
@@ -19,10 +19,6 @@ const InvoiceList = () => {
     async function func() {
       const response = await fetchInvoices();
       console.log(response);
-      // .then((response) => response.json())
-      // .then((response) => setInvoices(response.data))
-      // .catch((error) => setError(error))
-      // .finally(() => setIsLoading(false));
       setInvoices(response.data);
       setError(response.error);
       setIsLoading(false);
@@ -35,7 +31,7 @@ const InvoiceList = () => {
   async function fetchInvoices() {
     // Simulating an API call
     const response = await axios.post(
-      URL + "/api/invoice/invoiceList",
+      myURL + "/api/invoice/invoiceList",
       JSON.stringify({ firm: user._id }),
       {
         headers: {
@@ -63,7 +59,7 @@ const InvoiceList = () => {
                   </h3>
                   <p>Date: {invoice.date}</p>
                   <p>Buyer: {invoice.buyerName}</p>
-                  <p>Total: {invoice.total}</p>
+                  <p>Total: {invoice.totalAmount}</p>
                 </div>
                 <div className="sm:col-span-1 text-center mx-auto my-auto">
                   <button className="bg-white px-10 py-2 rounded-xl shadow shadow-black" onClick={()=>{navigate(`/editinvoice/${invoice._id}`)}} >Edit</button>

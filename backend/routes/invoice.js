@@ -9,15 +9,6 @@ const fs = require('fs')
 //not adding middleware
 //check InvoiceModel variable name if get error
 
-//importing and setting up cloudinary
-const cloudinary = require("cloudinary").v2;
-cloudinary.config({
-  cloud_name: "df8yirbq9",
-  api_key: "382357723465976",
-  api_secret: "LG9qTeHHWcFuH4F9QukgRWqdrJY",
-});
-
-
 // ---------------------------------------------------------------
 const AWS = require('aws-sdk');
 
@@ -294,62 +285,21 @@ router.post(
 
       const pdfBuffer = fs.readFileSync('./a4.pdf');
 
-      // const params = {
-      //   Bucket: 'billingapp7',
-      //   Key: 'invoice.pdf', // Filename to store in S3
-      //   Body: pdfBuffer, // Or pdfStream if using a stream
-      // };
+      const params = {
+        Bucket: 'billingapp7',
+        Key: firmGstIn+'invoice'+invoiceNumber.toString()+'r4nd0m.pdf', // Filename to store in S3
+        Body: pdfBuffer, // Or pdfStream if using a stream
+      };
       
-      // s3.upload(params, (err, data) => {
-      //   if (err) {
-      //     console.error('Error uploading PDF:', err);
-      //   } else {
-      //     console.log('PDF uploaded successfully!');
-      //     console.log(data);
-      //   }
-      // });
-
-      // const params2 = {
-      //   Bucket: 'billingapp7',
-      //   Key: 'invoice.pdf', // Filename of the PDF in S3
-      // };
-      
-
-      // s3.getObject(params2, (err, data) => {
-      //   if (err) {
-      //     console.error('Error downloading PDF:', err);
-      //   } else {
-      //     const pdfBuffer = data.Body;
-      //     console.log(pdfBuffer);
-      //     fs.writeFile('invoice.pdf', pdfBuffer, (err) => {
-      //       if (err) {
-      //         console.error('Error saving PDF:', err);
-      //       } else {
-      //         console.log('PDF saved successfully!');
-      //       }
-      //     });
-          
-      //     // Use the PDF buffer
-      //   }
-      // });
-      
-
-      let pdf_link = "",
-        jpg_link = "";
-
-      await cloudinary.uploader
-        .upload("a4.pdf", { resource_type: "raw" })
-        .then((result) => {
-          pdf_link = result.secure_url;
-        });
-
-      await cloudinary.uploader.upload("a4.pdf").then((result) => {
-        jpg_link = result.secure_url;
+      s3.upload(params, (err, data) => {
+        if (err) {
+          console.error('Error uploading PDF:', err);
+        } else {
+          console.log('PDF uploaded successfully!');
+          console.log(data);
+        }
       });
 
-      jpg_link = jpg_link.substring(0, jpg_link.length - 3) + "jpg";
-      console.log("PDF = " + pdf_link);
-      console.log("JPG = " + jpg_link);
 
       const invoice = await Invoice.create({
         firm: id,
@@ -365,8 +315,6 @@ router.post(
         itemCgst: itemCgst,
         itemPrice: itemPrice,
         itemQuantity: itemQuantity,
-        pdfLink: pdf_link,
-        jpgLink: jpg_link,
         totalAmount : sum.toFixed(2),
       });
 
@@ -376,12 +324,9 @@ router.post(
       });
 
       return res.json({
-        pdf_link: pdf_link,
-        jpg_link: jpg_link,
         invId: latestInv._id,
         pdfData: pdfBuffer
       });
-      // return res.send("Done!");
     } catch (error) {
       console.log("moye moye!");
       console.log(error);
@@ -590,21 +535,23 @@ router.post(
       doc.text(105, 290, "This invoice is computer generated.", "center");
       doc.save("a4.pdf");
 
-      let pdf_link = "",
-        jpg_link = "";
-      await cloudinary.uploader
-        .upload("a4.pdf", { resource_type: "raw" })
-        .then((result) => {
-          pdf_link = result.secure_url;
-        });
+      const pdfBuffer = fs.readFileSync('./a4.pdf');
 
-      await cloudinary.uploader.upload("a4.pdf").then((result) => {
-        jpg_link = result.secure_url;
+      const params = {
+        Bucket: 'billingapp7',
+        Key: firmGstIn+'invoice'+invoiceNumber.toString()+'r4nd0m.pdf', // Filename to store in S3
+        Body: pdfBuffer, // Or pdfStream if using a stream
+      };
+      
+      s3.upload(params, (err, data) => {
+        if (err) {
+          console.error('Error uploading PDF:', err);
+        } else {
+          console.log('PDF uploaded successfully!');
+          console.log(data);
+        }
       });
 
-      jpg_link = jpg_link.substring(0, jpg_link.length - 3) + "jpg";
-
-      console.log(id);
       const invoice = await Invoice.updateOne(
         { _id: id },
         {
@@ -619,15 +566,12 @@ router.post(
             itemCgst: itemCgst,
             itemPrice: itemPrice,
             itemQuantity: itemQuantity,
-            pdfLink: pdf_link,
-            jpgLink: jpg_link,
             totalAmount: sum.toFixed(2),
           },
         }
       );
-      const pdfBuffer = fs.readFileSync('./a4.pdf');
 
-      return res.json({ pdf_link: pdf_link, jpg_link: jpg_link, pdfData: pdfBuffer });
+      return res.json({pdfData: pdfBuffer });
     } catch (error) {
       console.log("Error in updation : \n", error);
     }

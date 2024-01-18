@@ -527,8 +527,8 @@ router.post(
             totalAmount: sum.toFixed(2),
           },
         }
-      );
-
+      ); 
+ 
       return res.json({pdfData: pdfBuffer });
     } catch (error) {
       console.log("Error in updation : \n", error);

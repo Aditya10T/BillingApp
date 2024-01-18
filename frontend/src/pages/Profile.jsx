@@ -16,7 +16,7 @@ const Profile = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { user, setUser } = useContext(UserContext);
+  const {user, setUser } = useContext(UserContext);
   const [vis, setVis] = useState(false);
   const navigate = useNavigate();
   console.log("context = ");
@@ -89,16 +89,15 @@ const Profile = () => {
   }, [navigate, user]);
 
   return (
-    <>
-      <div className="flex flex-col h-screen">
-        <div className="flex flex-row w-screen">
+      <div className="grid grid-cols-1 h-screen">
+        <div className="grid grid-cols-2  justify-between h-fit ">
           <Sidebar />
           <a className="ml-14 mt-2.5 font-bold text-2xl" href="/home">
-            Billing
+            Invoicify
           </a>
         </div>
-        <div className="flex-grow mt-10 flex flex-col justify-center items-center">
-          <div className="flex flex-col w-[500px] h-max p-6 border-solid  rounded-lg shadow-lg shadow-black border-indigo-300">
+        <div className="py-10">
+          <div className="shadow-2xl shadow-black   mx-auto border border-green-600 rounded-md w-[70%] md:w-[40%] p-10 ">
             <h1 className="self-center font-bold text-2xl text-black">
               Profile
             </h1>
@@ -108,7 +107,7 @@ const Profile = () => {
               </label>
               <input
                 value={name}
-                className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                className="mb-1 w-full rounded-md px-4 py-2 border-2  focus:border-green-600 outline-0"
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -118,7 +117,7 @@ const Profile = () => {
               </label>
               <input
                 value={email}
-                className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
@@ -128,7 +127,7 @@ const Profile = () => {
               </label>
               <input
                 value={phone}
-                className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                 onChange={(e) => {
                   setPhone(e.target.value);
                 }}
@@ -138,7 +137,7 @@ const Profile = () => {
               </label>
               <input
                 value={company}
-                className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                 onChange={(e) => {
                   setCompany(e.target.value);
                 }}
@@ -148,7 +147,7 @@ const Profile = () => {
               </label>
               <input
                 value={address}
-                className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                 onChange={(e) => {
                   setAddress(e.target.value);
                 }}
@@ -158,7 +157,7 @@ const Profile = () => {
               </label>
               <input
                 value={gstin}
-                className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                 onChange={(e) => {
                   setGstin(e.target.value);
                 }}
@@ -166,7 +165,7 @@ const Profile = () => {
             </div>
             <button
               onClick={handleUpdate}
-              className="mt-4 border-solid border-2 py-2 bg-orange-500 hover:bg-indigo-800 rounded-md text-black font-semibold"
+              className="ml-2 mt-5 font-semibold border-solid border-2 border-green-600 py-2 px-5 rounded-lg  hover:bg-green-500"
             >
               Update
             </button>
@@ -175,12 +174,14 @@ const Profile = () => {
                 setVis(true);
               }}
               hidden={vis ? "hidden" : ""}
-              className="mt-4 border-solid border-2 py-2 bg-green-500 hover:bg-indigo-800 text-white"
+              className="mx-2 my-5 font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-500"
             >
               Change Password
             </button>
             {vis && (
-              <div className="flex flex-col mt-4 p-4">
+              <>
+              <hr className="my-10 border-2 border-orange-600"/>
+              <div className="  p-4">
                   <form
                     className="flex flex-col"
                     onSubmit={updatePasswordSubmit}
@@ -193,7 +194,7 @@ const Profile = () => {
                         placeholder="Old Password"
                         required
                         value={oldPassword}
-                        className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                        className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                         onChange={(e) => setOldPassword(e.target.value)}
                       />
 
@@ -206,7 +207,7 @@ const Profile = () => {
                         placeholder="New Password"
                         required
                         value={newPassword}
-                        className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                        className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                         onChange={(e) => setNewPassword(e.target.value)}
                       />
                      <label htmlFor="confirmPassword" className="font-bold mt-2">
@@ -217,31 +218,32 @@ const Profile = () => {
                         placeholder="Confirm Password"
                         required
                         value={confirmPassword}
-                        className="border-solid border-2 p-2 rounded-md bg-gray-200"
+                        className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                         onChange={(e) => setConfirmPassword(e.target.value)}
                       />
-                    <div className="flex mt-2">
+                      
+                    <div className="mt-5">
                     <input
                       type="submit"
                       value="Change"
-                      className="bg-indigo-500 hover:bg-indigo-800 text-white p-2 px-4 border-solid border-2 rounded-md"
+                      className=" my-5 font-semibold border-solid border-2 border-green-600 py-2 px-5 rounded-lg  hover:bg-green-500"
                     />
                     <button
                       onClick={() => {
                         setVis(false);
                       }}
-                      className="bg-indigo-500 hover:bg-indigo-800 ml-4 text-white p-2 px-4 border-solid border-2 rounded-md"
+                      className=" mx-2 my-5 font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-500"
                     >
                       Go Back
                     </button>
                     </div>
                   </form>
               </div>
+              </>
             )}
           </div>
         </div>
       </div>
-    </>
   );
 };
 

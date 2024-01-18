@@ -41,84 +41,63 @@ const Register = () => {
   };
 
   return (
-    <>
-      <div className="flex flex-col min-w-screen h-screen">
-        <div className="flex items-center bg-black text-white justify-between px-6 h-[60px] w-full py-4">
+      <div className="grid grid-cols-1 h-screen">
+      <div className="grid grid-cols-2 px-6 justify-between py-4 h-fit ">
           <h1 className="text-lg md:text-xl font-extrabold">
-            <Link to="/">Billing</Link>
+            <Link to="/">Invoicify</Link>
           </h1>
-          <h3 className="font-bold border-solid border-2 border-indigo-600 py-1 px-2 rounded-lg bg-indigo-600 hover:bg-indigo-500">
-            <Link to="/login">Login</Link>
-          </h3>
+          <div className="place-self-end">
+            <button className="font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-500">
+            <Link to="/register">Sign Up</Link>
+            </button>
+          </div>
         </div>
-        <div className="flex grow justify-center items-center bg-indigo-100">
-          <div className="lg:w-2/5 md:w-2/3 w-[74%] ">
-            <div className="bg-white p-10 rounded-lg shadow-lg w-full ">
-              <h1 className="text-center text-2xl mb-2 text-gray-600 font-bold font-sans">
+
+
+        <div className="py-10">
+          <div className="">
+            <div className=" shadow-2xl shadow-black   mx-auto border border-green-600 rounded-md w-[70%] md:w-[40%] p-10 ">
+              <h1 className="text-center text-2xl mb-2 font-bold font-sans">
                 Register
               </h1>
               <div>
-                <label
-                  className="text-gray-800 font-semibold block my-2 text-md"
-                  htmlFor="confirm"
-                >
-                  Name
-                </label>
                 <input
-                  className="w-full bg-gray-100 px-4 py-1 rounded-lg focus:outline-none  focus:outline-indigo-500"
+                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                   type="text"
                   name="name"
                   id="name"
-                  placeholder="name"
+                  placeholder="Name"
                   onChange={(e) => setName(e.target.value)}
                   required
                 />
               </div>
               <div className="grid grid-cols-2">
               <div className="col-span-1 mr-2">
-                <label
-                  className="text-gray-800 font-semibold block my-2 text-md"
-                  htmlFor="company"
-                >
-                  Company
-                </label>
                 <input
-                  className=" bg-gray-100 px-4 py-1 rounded-lg focus:outline-indigo-500"
+                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                   type="text"
                   name="company"
                   id="company"
-                  placeholder="company"
+                  placeholder="Company"
                   onChange={(e) => setCompany(e.target.value)}
                   required
                 />
               </div>
               <div className="col-span-1 ml-2">
-                <label
-                  className="text-gray-800 font-semibold block my-2 text-md"
-                  htmlFor="phone"
-                >
-                  Phone
-                </label>
                 <input
-                  className="w-full bg-gray-100 px-4 py-1 rounded-lg  focus:outline-indigo-500"
+                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                   type="number"
                   name="phone"
                   id="phone"
-                  placeholder="Phone no."
+                  placeholder="Phone No."
                   onChange={(e) => setPhone(e.target.value)}
                   required
                 />
               </div>
               </div>
               <div>
-                <label
-                  className="text-gray-800 font-semibold block my-2 text-md"
-                  htmlFor="gstin"
-                >
-                  GSTIN
-                </label>
                 <input
-                  className="w-full bg-gray-100 px-4 py-1 rounded-lg  focus:outline-indigo-500"
+                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                   type="text"
                   name="gstin"
                   id="gstin"
@@ -128,59 +107,41 @@ const Register = () => {
                 />
               </div>
               <div>
-                <label
-                  className="text-gray-800 font-semibold block my-2 text-md"
-                  htmlFor="address"
-                >
-                  Address
-                </label>
                 <input
-                  className="w-full bg-gray-100 px-4 py-2 rounded-lg  focus:outline-indigo-500"
+                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                   type="text"
                   name="address"
                   id="address"
-                  placeholder="address"
+                  placeholder="Address"
                   onChange={(e) => setAddress(e.target.value)}
                   required
                 />
               </div>
               <div>
-                <label
-                  className="text-gray-800 font-semibold block my-2 text-md"
-                  htmlFor="email"
-                >
-                  Email
-                </label>
                 <input
-                  className="w-full bg-gray-100 px-4 py-2 rounded-lg  focus:outline-indigo-500"
+                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                   type="email"
                   name="email"
                   id="email"
-                  placeholder="@email"
+                  placeholder="Email"
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
               <div>
-                <label
-                  className="text-gray-800 font-semibold block my-2 text-md"
-                  htmlFor="password"
-                >
-                  Password
-                </label>
                 <input
-                  className="w-full bg-gray-100 px-4 py-2 rounded-lg  focus:outline-indigo-500"
+                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
                   type="Password"
                   name="password"
                   id="password"
-                  placeholder="password"
+                  placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
               <div>
                 <button
-                  className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
+                  className="my-5 font-semibold border-solid border-2 border-green-600 py-2 px-5 rounded-lg  hover:bg-green-500"
                   onClick={handleRegister}
                 >
                   Register
@@ -191,7 +152,6 @@ const Register = () => {
           </div>
         </div>
       </div>
-    </>
   );
 };
 

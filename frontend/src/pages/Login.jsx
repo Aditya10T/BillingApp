@@ -46,8 +46,8 @@ const Login = () => {
           </div>
         </div>
         <div className="">
-          <div className="mx-auto border-2 border-green-600 rounded-md w-[70%] md:w-[40%] p-10 ">
-            <h1 className="mx-auto text-xl font-bold text-left mb-5 ">LOGIN</h1>
+          <div className=" text-center shadow-2xl shadow-black   mx-auto border border-green-600 rounded-md w-[70%] md:w-[40%] p-10 ">
+            <h1 className=" mx-auto text-xl font-bold text-center mb-5 ">LOGIN</h1>
             <input
               onChange={(e) => setEmail(e.target.value)}
               className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
@@ -64,7 +64,7 @@ const Login = () => {
             />
             <button
               onClick={handleLogin}
-              className="my-2 border-2 border-green-600 rounded-md px-5 py-2 hover:bg-green-500 font-semibold"
+              className="my-2 border-2 border-green-600 rounded-md px-5 py-2 hover:bg-green-500 font-semibold "
             >
               Log in
             </button>

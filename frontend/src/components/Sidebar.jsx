@@ -29,7 +29,7 @@ const Sidebar = () => {
         >
           <nav role="navigation" className="p-6">
             <div className="flex item-center gap-4 pb-4">
-              <h2 className="text-3xl text-slate-700 font-bold">Billing</h2>
+              <h2 className="text-3xl text-slate-700 font-bold">Invoicify</h2>
               <button
                 onClick={() => {
                   setOpens(false);
@@ -37,7 +37,7 @@ const Sidebar = () => {
                      setOpens1(false);
                   }, 300);
                 }}
-                className="relative left-7 top-1 bg-slate-300 rounded-full"
+                className=" left-7 top-1 bg-slate-300 rounded-full"
               >
                 <FaChevronLeft size={18} />
               </button>

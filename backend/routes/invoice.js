@@ -9,19 +9,6 @@ const fs = require('fs')
 //not adding middleware
 //check InvoiceModel variable name if get error
 
-// ---------------------------------------------------------------
-const AWS = require('aws-sdk');
-
-AWS.config.update({
-  accessKeyId: 'AKIAXNNTXM6U5TXQZKMZ',
-  secretAccessKey: 'IBJCHaW+uCfU6kT09kppaMIl3mb8ndAnRi4bS2s7',
-  region: 'ap-south-1', // e.g., 'us-east-1'
-});
-
-// --------------------------------------------------------------
-
-const s3 = new AWS.S3();
-
 //funtion to convert number(integer) into words
 function valueInWords(value) {
   let ones = [
@@ -285,21 +272,6 @@ router.post(
 
       const pdfBuffer = fs.readFileSync('./a4.pdf');
 
-      const params = {
-        Bucket: 'billingapp7',
-        Key: firmGstIn+'invoice'+invoiceNumber.toString()+'r4nd0m.pdf', // Filename to store in S3
-        Body: pdfBuffer, // Or pdfStream if using a stream
-      };
-      
-      s3.upload(params, (err, data) => {
-        if (err) {
-          console.error('Error uploading PDF:', err);
-        } else {
-          console.log('PDF uploaded successfully!');
-          console.log(data);
-        }
-      });
-
 
       const invoice = await Invoice.create({
         firm: id,
@@ -537,21 +509,7 @@ router.post(
 
       const pdfBuffer = fs.readFileSync('./a4.pdf');
 
-      const params = {
-        Bucket: 'billingapp7',
-        Key: firmGstIn+'invoice'+invoiceNumber.toString()+'r4nd0m.pdf', // Filename to store in S3
-        Body: pdfBuffer, // Or pdfStream if using a stream
-      };
-      
-      s3.upload(params, (err, data) => {
-        if (err) {
-          console.error('Error uploading PDF:', err);
-        } else {
-          console.log('PDF uploaded successfully!');
-          console.log(data);
-        }
-      });
-
+     
       const invoice = await Invoice.updateOne(
         { _id: id },
         {

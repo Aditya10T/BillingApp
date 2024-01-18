@@ -34,36 +34,37 @@ const Login = () => {
   };
 
   return (
-    <>
-      <div className="flex flex-col h-screen">
-        <div className="flex items-center bg-black text-white justify-between px-6 md:px-[200px] py-4">
+      <div className="grid grid-cols-1 h-screen">
+        <div className="grid grid-cols-2 px-6 justify-between py-4 h-fit">
           <h1 className="text-lg md:text-xl font-extrabold">
-            <Link to="/">Billing</Link>
+            <Link to="/">Invoicify</Link>
           </h1>
-          <h3 className="font-bold border-solid border-2 border-indigo-600 py-1 px-2 rounded-lg bg-indigo-600 hover:bg-indigo-500">
+          <div className="place-self-end">
+            <button className="font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-500">
             <Link to="/register">Register</Link>
-          </h3>
+            </button>
+          </div>
         </div>
-        <div className="w-full grow flex justify-center items-center bg-indigo-100">
-          <div className="flex flex-col bg-white rounded-lg border-solid border-2 shadow-md shadow-black px-4 py-4 justify-center items-center space-y-4 h-[55%] w-[60%] md:w-[55%] lg:w-[45%]">
-            <h1 className="text-xl font-bold text-left mb-2">LOGIN</h1>
+        <div className="">
+          <div className="mx-auto border-2 border-green-600 rounded-md w-[70%] md:w-[40%] p-10 ">
+            <h1 className="mx-auto text-xl font-bold text-left mb-5 ">LOGIN</h1>
             <input
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-md px-4 py-2 border-2 lg:w-[60%] bg-gray-100 border-gray-300 focus:border-blue-600 outline-0"
+              className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
               type="text"
               placeholder="Enter your email"
               required
             />
             <input
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-md px-4 lg:w-[60%] py-2 border-2 bg-gray-100 border-gray-300 focus:border-blue-600 outline-0"
+              className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 outline-0"
               type="password"
               placeholder="Enter your password"
               required
             />
             <button
               onClick={handleLogin}
-              className="w-[200px] px-2 py-2 text-lg font-bold text-white bg-indigo-600 rounded-lg hover:bg-gray-500 hover:text-black "
+              className="my-2 border-2 border-green-600 rounded-md px-5 py-2 hover:bg-green-500 font-semibold"
             >
               Log in
             </button>
@@ -74,7 +75,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </>
   );
 };
 

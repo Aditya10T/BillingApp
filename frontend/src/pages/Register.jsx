@@ -48,7 +48,7 @@ const Register = () => {
           </h1>
           <div className="place-self-end">
             <button className="font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-500">
-            <Link to="/register">Sign Up</Link>
+            <Link to="/login">Sign Up</Link>
             </button>
           </div>
         </div>

@@ -52,7 +52,7 @@ const AddDeleteTableRows = ({ updateData }) => {
           <div className="container mx-auto my-8">
             <button
               type="button"
-              className="rounded-lg bg-green-500 text-white font-bold py-2 px-4 hover:bg-green-700"
+              className="font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-600"
               onClick={addItem}
             >
               Add Item

@@ -90,7 +90,7 @@ const Item = ({ items, handleChange, onDelete }) => {
         </div>
         <button
           type="button"
-          className="mt-4 bg-red-500 text-white font-bold rounded py-1 px-2 hover:bg-red-700"
+          className="mt-4 border-2  dark:text-white border-orange-600 bg-orange-600 font-bold rounded px-2"
           onClick={(event)=>func(index, event)}
         >
           Delete

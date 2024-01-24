@@ -89,7 +89,7 @@ const Profile = () => {
   }, [navigate, user]);
 
   return (
-      <div className="grid grid-cols-1 h-screen">
+      <div className="grid grid-cols-1 h-full dark:bg-gray-900 dark:text-white">
         <div className="grid grid-cols-2  justify-between h-fit ">
           <Sidebar />
           <a className="ml-14 mt-2.5 font-bold text-2xl" href="/home">
@@ -97,8 +97,8 @@ const Profile = () => {
           </a>
         </div>
         <div className="py-10">
-          <div className="shadow-2xl shadow-black   mx-auto border border-green-600 rounded-md w-[70%] md:w-[40%] p-10 ">
-            <h1 className="self-center font-bold text-2xl text-black">
+          <div className="shadow-2xl shadow-black   mx-auto border border-green-600 dark:shadow-orange-600 dark:border-white rounded-md w-[70%] md:w-[40%] p-10 ">
+            <h1 className="self-center font-bold text-2xl text-black dark:text-white">
               Profile
             </h1>
             <div className="flex flex-col mt-8 p-2">
@@ -107,7 +107,7 @@ const Profile = () => {
               </label>
               <input
                 value={name}
-                className="mb-1 w-full rounded-md px-4 py-2 border-2  focus:border-green-600 outline-0"
+                className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -117,7 +117,7 @@ const Profile = () => {
               </label>
               <input
                 value={email}
-                className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
@@ -127,7 +127,7 @@ const Profile = () => {
               </label>
               <input
                 value={phone}
-                className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                 onChange={(e) => {
                   setPhone(e.target.value);
                 }}
@@ -137,7 +137,7 @@ const Profile = () => {
               </label>
               <input
                 value={company}
-                className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                 onChange={(e) => {
                   setCompany(e.target.value);
                 }}
@@ -147,7 +147,7 @@ const Profile = () => {
               </label>
               <input
                 value={address}
-                className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                 onChange={(e) => {
                   setAddress(e.target.value);
                 }}
@@ -157,7 +157,7 @@ const Profile = () => {
               </label>
               <input
                 value={gstin}
-                className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                 onChange={(e) => {
                   setGstin(e.target.value);
                 }}
@@ -174,7 +174,7 @@ const Profile = () => {
                 setVis(true);
               }}
               hidden={vis ? "hidden" : ""}
-              className="mx-2 my-5 font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-500"
+              className="mx-2 my-5 font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-600"
             >
               Change Password
             </button>
@@ -194,7 +194,7 @@ const Profile = () => {
                         placeholder="Old Password"
                         required
                         value={oldPassword}
-                        className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                        className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                         onChange={(e) => setOldPassword(e.target.value)}
                       />
 
@@ -207,7 +207,7 @@ const Profile = () => {
                         placeholder="New Password"
                         required
                         value={newPassword}
-                        className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                        className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                         onChange={(e) => setNewPassword(e.target.value)}
                       />
                      <label htmlFor="confirmPassword" className="font-bold mt-2">
@@ -218,7 +218,7 @@ const Profile = () => {
                         placeholder="Confirm Password"
                         required
                         value={confirmPassword}
-                        className="mb-1 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                        className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                         onChange={(e) => setConfirmPassword(e.target.value)}
                       />
                       
@@ -226,13 +226,13 @@ const Profile = () => {
                     <input
                       type="submit"
                       value="Change"
-                      className=" my-5 font-semibold border-solid border-2 border-green-600 py-2 px-5 rounded-lg  hover:bg-green-500"
+                      className=" my-5 font-semibold border-solid border-2 border-green-600 py-2 px-5 rounded-lg  hover:bg-green-600"
                     />
                     <button
                       onClick={() => {
                         setVis(false);
                       }}
-                      className=" mx-2 my-5 font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-500"
+                      className=" mx-2 my-5 font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-600"
                     >
                       Go Back
                     </button>

@@ -11,7 +11,7 @@ const Landing = () => {
       <script src="//unpkg.com/alpinejs" defer></script>
 
       <main>
-        <section className="bg-white dark:bg-gray-900">
+        <section className="bg-white dark:bg-gray-900 dark:text-white">
           <nav
             x-data={isOpen}
             className="container mx-auto p-6 lg:flex lg:items-center lg:justify-between"

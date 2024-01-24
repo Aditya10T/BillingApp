@@ -41,28 +41,28 @@ const Register = () => {
   };
 
   return (
-      <div className="grid grid-cols-1 h-screen">
+      <div className="grid grid-cols-1 h-full dark:bg-gray-900 dark:text-white">
       <div className="grid grid-cols-2 px-6 justify-between py-4 h-fit ">
           <h1 className="text-lg md:text-xl font-extrabold">
             <Link to="/">Invoicify</Link>
           </h1>
           <div className="place-self-end">
-            <button className="font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-500">
-            <Link to="/login">Sign Up</Link>
+            <button className="my-2 border-2 border-green-600 dark:hover:bg-orange-600 dark:border-orange-600 rounded-md px-5 py-2 hover:bg-green-500 font-semibold ">
+            <Link to="/login">Login</Link>
             </button>
           </div>
         </div>
-
+ 
 
         <div className="py-10">
           <div className="">
-            <div className=" shadow-2xl shadow-black   mx-auto border border-green-600 rounded-md w-[70%] md:w-[40%] p-10 ">
+            <div className=" shadow-2xl shadow-black dark:shadow-orange-600  mx-auto border border-green-600 dark:border-white rounded-md w-[70%] md:w-[40%] p-10 ">
               <h1 className="text-center text-2xl mb-2 font-bold font-sans">
                 Register
               </h1>
               <div>
                 <input
-                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                  className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                   type="text"
                   name="name"
                   id="name"
@@ -74,7 +74,7 @@ const Register = () => {
               <div className="grid grid-cols-2">
               <div className="col-span-1 mr-2">
                 <input
-                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                  className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                   type="text"
                   name="company"
                   id="company"
@@ -85,7 +85,7 @@ const Register = () => {
               </div>
               <div className="col-span-1 ml-2">
                 <input
-                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                  className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                   type="number"
                   name="phone"
                   id="phone"
@@ -97,7 +97,7 @@ const Register = () => {
               </div>
               <div>
                 <input
-                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                  className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                   type="text"
                   name="gstin"
                   id="gstin"
@@ -108,7 +108,7 @@ const Register = () => {
               </div>
               <div>
                 <input
-                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                  className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                   type="text"
                   name="address"
                   id="address"
@@ -119,7 +119,7 @@ const Register = () => {
               </div>
               <div>
                 <input
-                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                  className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                   type="email"
                   name="email"
                   id="email"
@@ -130,7 +130,7 @@ const Register = () => {
               </div>
               <div>
                 <input
-                  className="my-2 w-full rounded-md px-4 py-2 border-2 focus:border-green-600 outline-0"
+                  className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
                   type="Password"
                   name="password"
                   id="password"
@@ -141,7 +141,7 @@ const Register = () => {
               </div>
               <div>
                 <button
-                  className="my-5 font-semibold border-solid border-2 border-green-600 py-2 px-5 rounded-lg  hover:bg-green-500"
+                  className="my-2 border-2 border-green-600 dark:hover:bg-orange-600 dark:border-orange-600 rounded-md px-5 py-2 hover:bg-green-500 font-semibold "
                   onClick={handleRegister}
                 >
                   Register

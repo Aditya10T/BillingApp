@@ -1,17 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaLinkedin } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
+import { FaToggleOff, FaToggleOn } from "react-icons/fa";
 import { IoMenuSharp, IoClose } from "react-icons/io5";
+import { ThemeContext } from "../context/ThemeContext";
 
 const Landing = () => {
   const [isOpen, setOpen] = useState(false);
+  const { theme, setTheme } = useContext(ThemeContext);
+
+  useEffect(() => {
+    console.log(theme);
+  }, [theme]);
 
   return (
     <>
       <script src="//unpkg.com/alpinejs" defer></script>
 
       <main>
-        <section className="bg-white dark:bg-gray-900">
+        <section className="bg-white dark:bg-gray-900 dark:text-white">
           <nav
             x-data={isOpen}
             className="container mx-auto p-6 lg:flex lg:items-center lg:justify-between"
@@ -51,22 +58,33 @@ const Landing = () => {
                 !isOpen && "hidden"
               } absolute inset-x-0 z-20 w-full bg-white px-6 py-4 shadow-md transition-all duration-300 ease-in-out dark:bg-gray-900 lg:relative lg:top-0 lg:mt-0 lg:flex lg:w-auto lg:translate-x-0 lg:items-center lg:bg-transparent lg:p-0 lg:opacity-100 lg:shadow-none lg:dark:bg-transparent`}
             >
-              <div className="lg:-px-8 flex flex-col space-y-4 lg:mt-0 lg:flex-row lg:space-y-0">
-                <a
-                  className="my-2 border-2 border-orange-600 rounded-md px-5 py-2 hover:bg-orange-500 font-semibold"
-                  href="/login"
-                >
-                  Login
-                </a>
+              <button
+                className="text-4xl mx-4"
+                onClick={() => {
+                  setTheme(theme === "dark" ? "light" : "dark");
+                  localStorage.setItem(
+                    "theme",
+                    theme === "dark" ? "light" : "dark"
+                  );
+                }}
+              >
+                <span className="text-xs">Theme</span>
+                {theme === "dark" && <FaToggleOn className="text-orange-600" />}
+                {theme === "light" && (
+                  <FaToggleOff className="text-orange-600" />
+                )}
+              </button>
+              <div className="my-2 mx-2">
+                <button className=" border-2 border-orange-600 rounded-md px-5 py-2 hover:bg-orange-500 font-semibold">
+                  <a href="/login">Login</a>
+                </button>
               </div>
 
-              <a
-                className="my-2 mx-2 border-2 border-orange-600 rounded-md px-5 py-2 hover:bg-orange-500 font-semibold"
-                href="/register"
-              >
-                {" "}
-                SignUp{" "}
-              </a>
+              <div className="my-2 mx-2">
+                <button className=" border-2 border-orange-600 rounded-md px-5 py-2 hover:bg-orange-500 font-semibold">
+                  <a href="/register">SignUp</a>
+                </button>
+              </div>
             </div>
           </nav>
 

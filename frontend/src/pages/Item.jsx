@@ -11,90 +11,100 @@ const Item = ({ items, handleChange, onDelete }) => {
       itemSgstp,
     } = data;
 
-    function func(index, event){
+    function func(index, event) {
       console.log(index);
       onDelete(index, event);
-      console.log("ok")
+      console.log("ok");
     }
 
     return (
-      <div className="card flex flex-col rounded shadow-md bg-gray-100 p-4" key={index}>
-
+      <div
+        className="rounded  bg-gray-200 dark:bg-gray-900 dark:border-2 dark:border-orange-600 p-4 my-5"
+        key={index}
+      >
         <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
           <div>
-            <label className="text-gray-500 flex ">Item Name</label>
+            <label className="text-gray-500 flex dark:text-white">
+              Item Name
+            </label>
             <input
               name="itemNamep"
               type="text"
               value={itemNamep}
               placeholder="Item Name"
-              className="border border-gray-500 rounded w-11/12 px-2"
+              className="border-2 border-gray-500 rounded dark:bg-gray-700 dark:focus:border-green-600 outline-0 w-11/12 px-2"
               onChange={(event) => handleChange(index, event)}
             ></input>
           </div>
           <div>
-            <label className="text-gray-500 flex ">HSN/SAC</label>
+            <label className="text-gray-500 flex dark:text-white ">
+              HSN/SAC
+            </label>
             <input
               name="itemHsnp"
               type="text"
               value={itemHsnp >= 0 ? itemHsnp : ""}
               placeholder="HSN/SAC"
-              className="border border-gray-500 rounded w-11/12 px-2"
+              className="border-2 border-gray-500 rounded dark:bg-gray-700 dark:focus:border-green-600 outline-0 w-11/12 px-2"
               onChange={(event) => handleChange(index, event)}
             ></input>
           </div>
           <div>
-            <label className="text-gray-500 flex">Quantity</label>
+            <label className="text-gray-500 dark:text-white flex">
+              Quantity
+            </label>
             <input
               name="itemQuantityp"
               type="text"
-            value={(itemQuantityp>=0)?itemQuantityp:''}
+              value={itemQuantityp >= 0 ? itemQuantityp : ""}
               placeholder="Quantity"
-              className="border border-gray-500 rounded w-11/12 px-2"
+              className="border-2 border-gray-500 rounded dark:bg-gray-700 dark:focus:border-green-600 outline-0 w-11/12 px-2"
               onChange={(event) => handleChange(index, event)}
             ></input>
           </div>
           <div>
-            <label className="text-gray-500 flex">Price</label>
+            <label className="text-gray-500 flex dark:text-white">Price</label>
             <input
               name="itemPricep"
               placeholder="Price"
               type="text"
-            value={(itemPricep>=0)?itemPricep:''}
-              className="border border-gray-500 rounded w-11/12 px-2"
+              value={itemPricep >= 0 ? itemPricep : ""}
+              className="border-2 border-gray-500 rounded dark:bg-gray-700 dark:focus:border-green-600 outline-0 w-11/12 px-2"
               onChange={(event) => handleChange(index, event)}
             ></input>
           </div>
           <div>
-            <label className="text-gray-500 flex">CGST</label>
+            <label className="text-gray-500 flex dark:text-white">CGST</label>
             <input
               name="itemCgstp"
               placeholder="CGST"
               type="text"
-            value={(itemCgstp>=0)?itemCgstp:''}
-              className="border border-gray-500 rounded w-11/12 px-2"
+              value={itemCgstp >= 0 ? itemCgstp : ""}
+              className="border-2 border-gray-500 rounded dark:bg-gray-700 dark:focus:border-green-600 outline-0 w-11/12 px-2"
               onChange={(event) => handleChange(index, event)}
             ></input>
           </div>
           <div>
-            <label className="text-gray-500 flex">SGST</label>
+            <label className="text-gray-500 flex dark:text-white">SGST</label>
             <input
               name="itemSgstp"
               placeholder="SGST"
               type="text"
-            value={(itemSgstp>=0)?itemSgstp:''}
-              className="border border-gray-500 rounded w-11/12 px-2"
+              value={itemSgstp >= 0 ? itemSgstp : ""}
+              className="border-2 border-gray-500 rounded dark:bg-gray-700 dark:focus:border-green-600 outline-0 w-11/12 px-2"
               onChange={(event) => handleChange(index, event)}
             ></input>
           </div>
         </div>
-        <button
-          type="button"
-          className="mt-4 border-2  dark:text-white border-orange-600 bg-orange-600 font-bold rounded px-2"
-          onClick={(event)=>func(index, event)}
-        >
-          Delete
-        </button>
+        <div className="grid place-content-center">
+          <button
+            type="button"
+            className="mt-4 border-2  dark:text-white border-orange-600 bg-orange-600 font-bold rounded px-2"
+            onClick={(event) => func(index, event)}
+          >
+            Delete
+          </button>
+        </div>
       </div>
     );
   });

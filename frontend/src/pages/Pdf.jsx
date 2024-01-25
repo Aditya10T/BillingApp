@@ -4,6 +4,8 @@ import { saveAs } from "file-saver";
 import axios from "axios";
 import { myURL } from "../url";
 import "../App.css";
+import { Link } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 const Pdf = () => {
   const today = new Date();
@@ -31,7 +33,7 @@ const Pdf = () => {
     buyerAddress: "",
     buyerPincode: 0,
     buyerGstIn: "",
-    buyerContact: 9283749832,
+    buyerContact: 0,
     itemDetails: [],
   });
 
@@ -161,6 +163,17 @@ const Pdf = () => {
 
   return (
     <div className="dark:bg-gray-900 dark:text-white">
+      <div className="grid grid-cols-2  justify-between  h-fit dark:shadow-md dark:shadow-orange-600">
+        <Sidebar />
+        <a className="ml-14 mt-2.5 font-bold text-2xl" href="/home">
+          Invoicify
+        </a>
+        <div className="place-self-end px-6 py-2">
+          <button className="font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-600">
+            <Link to="/">Logout</Link>
+          </button>
+        </div>
+      </div>
       {isLoading && <p>Loading...</p>}
       {!isLoading && (
         <div className=" py-8 px-4">
@@ -170,7 +183,6 @@ const Pdf = () => {
             </h1>
             <div className="flex items-center space-x-4">
               <span className="text-gray-500 dark:text-gray-200">Firm:</span>
-              {/* name ->firm name */}
               <span className="font-bold text-gray-700 dark:text-white">
                 {info.firmName}
               </span>
@@ -212,7 +224,7 @@ const Pdf = () => {
                 placeholder="Enter Buyer Name"
                 onChange={inputChange}
                 required
-                className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
+                className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-800 dark:placeholder:text-gray-500 outline-0"
               />
               <label className="text-gray-500 dark:text-gray-200">
                 Buyer Address:
@@ -224,7 +236,7 @@ const Pdf = () => {
                 placeholder="Enter Buyer Address"
                 onChange={inputChange}
                 required
-                className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
+                className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-800 dark:placeholder:text-gray-500 outline-0"
               />
               <div className="grid grid-cols-1 md:grid-cols-3">
                 <div className="">
@@ -237,7 +249,7 @@ const Pdf = () => {
                     placeholder="Enter Pincode"
                     onChange={inputChange}
                     required
-                    className="my-2 rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
+                    className="my-2 rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-800 dark:placeholder:text-gray-500 outline-0"
                   />
                 </div>
                 <div>
@@ -250,7 +262,7 @@ const Pdf = () => {
                     placeholder="Enter GSTIN"
                     onChange={inputChange}
                     required
-                    className="my-2 rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
+                    className="my-2 rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-800 dark:placeholder:text-gray-500 outline-0"
                   />
                 </div>
                 <div>
@@ -263,7 +275,7 @@ const Pdf = () => {
                     placeholder="Enter Contact Number"
                     onChange={inputChange}
                     required
-                    className="my-2 rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-400 dark:placeholder:text-white outline-0"
+                    className="my-2 rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-800 dark:placeholder:text-gray-500 outline-0"
                   />
                 </div>
               </div>

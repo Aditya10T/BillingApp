@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
@@ -12,11 +12,18 @@ import Pdf from "./pages/Pdf";
 import Profile from "./pages/Profile";
 import Invoices from "./pages/InvoiceList";
 import EditInvoice from "./pages/EditInvoice";
-
+import { ThemeContext, ThemeContextProvider } from "./context/ThemeContext";
 
 const App = () => {
+  const { theme, setTheme } = useContext(ThemeContext);
+  // const theme = localStorage.getItem('theme');
+
+  useEffect(() => {
+    console.log(theme);
+  }, [theme]);
+
   return (
-    <>
+    <div className={`${theme}`}>
       <UserContextProvider>
         <Routes>
           <Route exact path="/" element={<Landing />} />
@@ -55,7 +62,7 @@ const App = () => {
           />
         </Routes>
       </UserContextProvider>
-    </>
+    </div>
   );
 };
 

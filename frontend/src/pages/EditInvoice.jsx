@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { myURL } from "../url";
 import axios from "axios";
 import Item from "./Item";
 import { saveAs } from "file-saver";
+import Sidebar from "../components/Sidebar";
 
 const EditInvoice = () => {
   //to load invoice id from URL
@@ -12,7 +13,7 @@ const EditInvoice = () => {
   //initialised variables
   //loading false after data is fetched
   const [isLoading, setIsLoading] = useState(true);
-  // disable buttons while invoice is loading 
+  // disable buttons while invoice is loading
   const [buttonsDisabled, setButtonsDisabled] = useState(false);
   //variable to store pdf url
   const [newPdfUrl, setNewPdfUrl] = useState("");
@@ -69,7 +70,7 @@ const EditInvoice = () => {
           itemQuantityp: invoice.itemQuantity[i],
           itemPricep: invoice.itemPrice[i],
           itemCgstp: invoice.itemCgst[i],
-          itemSgstp: invoice.itemSgst[i],         
+          itemSgstp: invoice.itemSgst[i],
         });
         setItems(newItems);
       }
@@ -77,6 +78,7 @@ const EditInvoice = () => {
 
     // when items is set then using it to fill info
     if (!isLoading && items) {
+      console.log(info);
       setInfo({
         id: id.id,
         firmName: user.company,
@@ -88,9 +90,9 @@ const EditInvoice = () => {
         date: invoice.date,
         buyerName: invoice.buyerName,
         buyerAddress: invoice.buyerAddress,
-        buyerPincode: 0,
+        buyerPincode: invoice.buyerPincode,
         buyerGstIn: invoice.buyerGstIn,
-        buyerContact: 9283749832,
+        buyerContact: invoice.buyerContact,
         itemDetails: items,
       });
     }
@@ -179,62 +181,82 @@ const EditInvoice = () => {
 
   // function to just check and set the recieved URLs.
   const successCallback = (response) => {
-    const blob = new Blob([new Uint8Array(response.data.pdfData.data).buffer], { type: 'application/pdf' });
+    const blob = new Blob([new Uint8Array(response.data.pdfData.data).buffer], {
+      type: "application/pdf",
+    });
     const url = URL.createObjectURL(blob);
     setNewPdfUrl(url);
     setButtonsDisabled(false);
   };
 
-  const downloadPDF = (e)=>{
+  const downloadPDF = (e) => {
     e.preventDefault();
     saveAs(newPdfUrl, `${info.firmGstIn}_Invoice${info.invoiceNumber}.pdf`);
-  }
+  };
 
   //update the URL in the current batch iteslf.
-  useEffect(()=>{
+  useEffect(() => {
     console.log("Updated new pdf url :", newPdfUrl);
-  }, [newPdfUrl])
+  }, [newPdfUrl]);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(buttonsDisabled);
-  }, [buttonsDisabled])
+  }, [buttonsDisabled]);
 
   //  UI
   return (
-    <div className="bg-gray-100 py-8 px-4">
+    <div className="bg-gray-100 dark:bg-gray-900 dark:text-white">
+      <div className="grid grid-cols-2  justify-between  h-fit dark:shadow-md dark:shadow-orange-600">
+        <Sidebar />
+        <a className="ml-14 mt-2.5 font-bold text-2xl" href="/home">
+          Invoicify
+        </a>
+        <div className="place-self-end px-6 py-2">
+          <button className="font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-600">
+            <Link to="/">Logout</Link>
+          </button>
+        </div>
+      </div>
       {isLoading && <p>Loading...</p>}
       {!isLoading && info != null && (
-        <div>
-          <form className="space-y-8">
-            <h1 className="text-3xl font-semibold text-gray-700 text-center underline ">
+        <div className=" py-8 px-4">
+          <form className="space-y-8 ">
+            <h1 className="text-3xl font-semibold text-gray-700 dark:text-white text-center underline  ">
               Invoice Details
             </h1>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-500">Firm:</span>
-              {/* name ->firm name */}
-              <span className="font-bold text-gray-700">{user.company}</span>
+              <span className="text-gray-500 dark:text-gray-200">Firm:</span>
+              <span className="font-bold text-gray-700 dark:text-white">
+                {user.company}
+              </span>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-500">Invoice No.:</span>
-              <span className="font-bold text-gray-700">
+              <span className="text-gray-500 dark:text-gray-200">
+                Invoice No.:
+              </span>
+              <span className="font-bold text-gray-700 dark:text-white">
                 {invoice.invoiceNumber}
               </span>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-500">Date:</span>
-              <span className="font-bold text-gray-700">
+              <span className="text-gray-500 dark:text-gray-200">Date:</span>
+              <span className="font-bold text-gray-700 dark:text-white">
                 {invoice.date.substr(0, 10)}
               </span>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-500">Contact:</span>
-              <span className="font-bold text-gray-700">{user.phone}</span>
+              <span className="text-gray-500 dark:text-gray-200">Contact:</span>
+              <span className="font-bold text-gray-700 dark:text-white">
+                {user.phone}
+              </span>
             </div>
-            <h2 className="text-lg font-semibold text-gray-700">
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
               Buyer Information
             </h2>
             <div className="flex flex-col space-y-2">
-              <label className="text-gray-500">Buyer Name:</label>
+              <label className="text-gray-500 dark:text-gray-200">
+                Buyer Name:
+              </label>
               <input
                 type="text"
                 name="buyerName"
@@ -242,9 +264,11 @@ const EditInvoice = () => {
                 onChange={inputChange}
                 value={info.buyerName}
                 required
-                className="rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700"
+                className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-800 dark:placeholder:text-gray-500 outline-0"
               />
-              <label className="text-gray-500">Buyer Address:</label>
+              <label className="text-gray-500 dark:text-gray-200">
+                Buyer Address:
+              </label>
               <textarea
                 rows="3"
                 type="text"
@@ -253,11 +277,11 @@ const EditInvoice = () => {
                 onChange={inputChange}
                 value={info.buyerAddress}
                 required
-                className="rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700"
+                className="my-2 w-full rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-800 dark:placeholder:text-gray-500 outline-0"
               />
-              <div className="grid sm:grid-cols-1">
+              <div className="grid grid-cols-1 md:grid-cols-3">
                 <div className="">
-                  <label className="text-gray-500 mr-2 flex">
+                  <label className="text-gray-500 mr-2 flex dark:text-gray-200">
                     Buyer Pincode:
                   </label>
                   <input
@@ -267,11 +291,13 @@ const EditInvoice = () => {
                     onChange={inputChange}
                     value={info.buyerPincode}
                     required
-                    className="rounded-md border border-gray-300 bg-gray-100 my-2 px-3 py-2 text-gray-700"
+                    className="my-2 rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-800 dark:placeholder:text-gray-500 outline-0"
                   />
                 </div>
                 <div>
-                  <label className="text-gray-500 flex">Buyer GSTIN:</label>
+                  <label className="text-gray-500 dark:text-gray-200 flex">
+                    Buyer GSTIN:
+                  </label>
                   <input
                     type="text"
                     name="buyerGstIn"
@@ -279,20 +305,24 @@ const EditInvoice = () => {
                     onChange={inputChange}
                     value={info.buyerGstIn}
                     required
-                    className="rounded-md border border-gray-300 bg-gray-100 my-2 px-3 py-2 text-gray-700"
+                    className="my-2 rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-800 dark:placeholder:text-gray-500 outline-0"
+                  />
+                </div>
+                <div>
+                  <label className="text-gray-500 dark:text-gray-200 flex">
+                    Buyer Contact:
+                  </label>
+                  <input
+                    type="tel"
+                    name="buyerContact"
+                    placeholder="Enter Contact Number"
+                    value={info.buyerContact}
+                    onChange={inputChange}
+                    required
+                    className="my-2 rounded-md px-4  py-2 border-2 focus:border-green-600 dark:focus:border-white dark:bg-gray-800 dark:placeholder:text-gray-500 outline-0"
                   />
                 </div>
               </div>
-              <label className="text-gray-500">Buyer Contact:</label>
-              <input
-                type="tel"
-                name="buyerContact"
-                placeholder="Enter Contact Number"
-                onChange={inputChange}
-                value={info.buyerContact}
-                required
-                className="rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700"
-              />
             </div>
 
             <div>
@@ -301,7 +331,7 @@ const EditInvoice = () => {
                   <div className="container mx-auto my-8">
                     <button
                       type="button"
-                      className="rounded-lg bg-green-500 text-white font-bold py-2 px-4 hover:bg-green-700"
+                      className="font-semibold border-solid border-2 border-orange-600 py-2 px-5 rounded-lg  hover:bg-orange-600"
                       onClick={addItem}
                     >
                       Add Item
@@ -319,23 +349,28 @@ const EditInvoice = () => {
             </div>
 
             <button
-              className="rounded-md bg-yellow-400 px-4 py-2 font-semibold text-black shadow-md hover:bg-yellow-500"
+              className="font-semibold border-solid border-2 border-green-600 py-2 px-5 rounded-lg  hover:bg-green-600"
               type="submit"
               disabled={buttonsDisabled}
               onClick={formSubmission}
             >
               Generate PDF
             </button>
-          {newPdfUrl && <button
-        className="rounded-md bg-green-500  mx-4 my-2 px-4 py-2 font-semibold text-white shadow-md hover:bg-green-600"
-        onClick={downloadPDF}
-        disabled={buttonsDisabled}>
-          Download PDF
-        </button>}
-      </form>
-      <div className="bg-gray-100-300 text-center my-2 ">
-        {newPdfUrl && <iframe src={newPdfUrl} className="pdf-container mx-auto"   />}
-        </div>
+            {newPdfUrl && (
+              <button
+                className="font-semibold border-solid border-2 border-green-600 py-2 px-5 rounded-lg  hover:bg-green-600"
+                onClick={downloadPDF}
+                disabled={buttonsDisabled}
+              >
+                Download PDF
+              </button>
+            )}
+          </form>
+          <div className="bg-gray-100-300 text-center my-2 ">
+            {newPdfUrl && (
+              <iframe src={newPdfUrl} className="pdf-container mx-auto" />
+            )}
+          </div>
         </div>
       )}
     </div>

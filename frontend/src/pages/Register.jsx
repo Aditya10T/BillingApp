@@ -41,7 +41,7 @@ const Register = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 h-full dark:bg-gray-900 dark:text-white">
+    <div className="grid grid-cols-1 h-screen dark:bg-gray-900 dark:text-white">
       <div className="grid grid-cols-2 px-6 justify-between py-2 h-fit dark:shadow-md dark:shadow-orange-600 ">
         <h1 className="text-lg md:text-xl font-extrabold my-2">
           <Link to="/">Invoicify</Link>
